@@ -11,7 +11,7 @@ const Main: FC = () => {
       <Sider width={256} theme="light" css={{ borderRight: "1px solid gray" }}>
         <Events />
       </Sider>
-      <Content>
+      <Content css={{ overflowY: "auto" }}>
         <Calendar />
       </Content>
     </>

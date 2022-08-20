@@ -4,7 +4,7 @@ import { FC } from "react";
 import "./App.css";
 import "antd/dist/antd.min.css";
 import Header from "./components/Header/Header";
-import { layoutMainStyle } from "./App.styles";
+import { appStyle, layoutMainStyle } from "./App.styles";
 import Main from "./components/Main/Main";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
@@ -12,6 +12,7 @@ import { ConfigProvider } from "antd";
 import ruRu from "antd/es/locale/ru_RU";
 import moment from "moment";
 import "moment/locale/ru";
+import { Global } from "@emotion/react";
 
 moment.locale("ru");
 moment.updateLocale("ru", {
@@ -23,6 +24,7 @@ moment.updateLocale("ru", {
 const App: FC = () => {
   return (
     <ConfigProvider locale={ruRu}>
+      <Global styles={appStyle} />
       <Layout style={{ height: "100%" }}>
         <Header />
         <Layout style={layoutMainStyle}>
