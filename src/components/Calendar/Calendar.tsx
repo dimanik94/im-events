@@ -55,6 +55,18 @@ const Calendar: FC = () => {
       // monthCellRender={monthCellRender}
       // locale={locale}
       disabledDate={(date) => date < moment(moment.now())}
+      // css={{
+      //   color: "red",
+      //   ".ant-picker-content": {
+      //     height: "calc(100vh - 120px)",
+      //   },
+      //   // "tbody, tr": {
+      //   //   height: "100%",
+      //   // },
+      //   ".ant-picker-calendar-date-content": {
+      //     minHeight: 86,
+      //   },
+      // }}
     />
   );
 };
