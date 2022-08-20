@@ -1,5 +1,5 @@
 /** @jsxImportSource @emotion/react */
-import { Button, Form, Input, Modal } from "antd";
+import { Button, Form, Input, InputNumber, Modal } from "antd";
 import { FC, useCallback, useRef, useState } from "react";
 import { useDrop } from "react-dnd";
 import { buttonStyle } from "../../styles/style";
@@ -64,8 +64,8 @@ const DateFullCell: FC<IDateFullCellProps> = (props) => {
             />
           </Form.Item>
 
-          <Form.Item name="minMembers">
-            <Input placeholder="Минимальное количество участников" />
+          <Form.Item name="minMembers" rules={[{ type: "number" }]}>
+            <InputNumber placeholder="123" min={1} max={1000} />
           </Form.Item>
 
           <Form.Item wrapperCol={{ span: 24 }}>
