@@ -64,7 +64,7 @@ const Header: FC<IHeaderProps> = ({ isAuthorized, setIsAuthorized }) => {
               paddingLeft: "8px",
             }}
           >
-            Заголовок
+            Календарь
           </div>
         </div>
         <div css={buttonWrapperStyle}>
