@@ -54,19 +54,57 @@ const Calendar: FC = () => {
       // dateCellRender={dateCellRender}
       // monthCellRender={monthCellRender}
       // locale={locale}
-      disabledDate={(date) => date < moment(moment.now())}
-      // css={{
-      //   color: "red",
-      //   ".ant-picker-content": {
-      //     height: "calc(100vh - 120px)",
-      //   },
-      //   // "tbody, tr": {
-      //   //   height: "100%",
-      //   // },
-      //   ".ant-picker-calendar-date-content": {
-      //     minHeight: 86,
-      //   },
-      // }}
+      disabledDate={(date) => {
+        if (date.date() === 3 && date.month() === 8) {
+          return true;
+        }
+
+        const asd = moment()
+          .set("date", date.date())
+          .set("month", date.month());
+
+        const asd1 = moment()
+          .set("date", moment(moment.now()).date())
+          .set("month", moment(moment.now()).month());
+
+        return asd < asd1;
+        // return date < moment(moment.now());
+      }}
+      css={{
+        padding: "8px 16px",
+        ".ant-picker-calendar-date-today": {
+          borderColor: "#0cb3b3 !important",
+          // backgroundColor: "#e1faf6 !important",
+        },
+        ".ant-picker-cell-selected .ant-picker-calendar-date-value": {
+          color: "#0cb3b3 !important",
+        },
+        // ".ant-picker-content": {
+        //   height: "calc(100vh - 120px)",
+        // },
+        ".ant-picker-cell-selected .ant-picker-calendar-date": {
+          backgroundColor: "#e1faf6 !important",
+        },
+        ".ant-select:not(.ant-select-disabled):hover .ant-select-selector": {
+          borderColor: "#0cb3b3 !important",
+        },
+        ".ant-select-item-option-selected:not(.ant-select-item-option-disabled)":
+          {
+            backgroundColor: "#e1faf6 !important",
+          },
+        ".ant-radio-button-wrapper-checked:not(.ant-radio-button-wrapper-disabled)":
+          {
+            color: "#0cb3b3 !important",
+            borderColor: "#0cb3b3 !important",
+          },
+        ".ant-radio-button-wrapper-checked:not(.ant-radio-button-wrapper-disabled):first-child":
+          {
+            borderColor: "#0cb3b3 !important",
+          },
+        ".ant-radio-button-wrapper:hover": {
+          color: "#0cb3b3 !important",
+        },
+      }}
     />
   );
 };

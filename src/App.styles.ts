@@ -2,6 +2,7 @@ export const layoutMainStyle = {
   flexDirection: "row",
   height: "calc(100vh - 48px)",
   overflow: "hidden",
+  backgroundColor: "white",
 } as const;
 
 export const appStyle = () => {
