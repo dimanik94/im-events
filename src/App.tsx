@@ -6,13 +6,17 @@ import "antd/dist/antd.min.css";
 import Header from "./components/Header/Header";
 import { layoutMainStyle } from "./App.styles";
 import Main from "./components/Main/Main";
+import { DndProvider } from "react-dnd";
+import { HTML5Backend } from "react-dnd-html5-backend";
 
 const App: FC = () => {
   return (
     <Layout style={{ height: "100%" }}>
       <Header />
       <Layout style={layoutMainStyle}>
-        <Main />
+        <DndProvider backend={HTML5Backend}>
+          <Main />
+        </DndProvider>
       </Layout>
     </Layout>
   );
