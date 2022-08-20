@@ -1,9 +1,10 @@
 /** @jsxImportSource @emotion/react */
 import { Layout } from "antd";
-import { Content, Header } from "antd/lib/layout/layout";
-import Sider from "antd/lib/layout/Sider";
+import { Header } from "antd/lib/layout/layout";
 import { FC } from "react";
 import "./App.css";
+import { layoutMainStyle } from "./App.styles";
+import Main from "./components/Main/Main";
 
 const App: FC = () => {
   return (
@@ -13,13 +14,8 @@ const App: FC = () => {
       >
         Header
       </Header>
-      <Layout
-        style={{ height: "calc(100% - 48px)", display: "flex", flex: "auto" }}
-      >
-        <Sider css={{ borderRight: "1px solid gray" }}>Sider</Sider>
-        <Content style={{ width: "100%" }}>
-          <div css={{ color: "red" }}>Content</div>
-        </Content>
+      <Layout style={layoutMainStyle}>
+        <Main />
       </Layout>
     </Layout>
   );
