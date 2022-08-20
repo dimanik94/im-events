@@ -1,20 +1,15 @@
 /** @jsxImportSource @emotion/react */
-import { FC, useCallback, useMemo, useState } from "react";
+import { FC, useCallback, useState } from "react";
 import type { IHeaderProps } from "./Header.types";
 import { Header as AntHeader } from "antd/lib/layout/layout";
 import { wrapperStyle } from "./Header.styles";
-import { Avatar, Button, Form, Input, Modal } from "antd";
+import { Avatar, Button } from "antd";
+import AuthModal from "../AuthModal/AuthModal";
+import { buttonStyle } from "../../styles/style";
 
 const Header: FC<IHeaderProps> = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
-
-  const onFinish = useCallback((values: any) => {
-    console.log("Success:", values);
-  }, []);
-
-  const onFinishFailed = useCallback((errorInfo: any) => {
-    console.log("Failed:", errorInfo);
-  }, []);
+  const [isAuthorized, setIsAuthorized] = useState(false); // todo: флаг авторизации
 
   const showModal = useCallback(() => {
     setIsModalVisible(true);
@@ -27,95 +22,6 @@ const Header: FC<IHeaderProps> = () => {
   const handleCancel = useCallback(() => {
     setIsModalVisible(false);
   }, []);
-
-  const buttonStyle = useMemo(() => {
-    const commonStyle = {
-      color: "#fff !important",
-      fill: "#fff !important",
-      borderColor: "rgba(0, 0, 0, 0) !important",
-    };
-
-    return {
-      height: "28px",
-      alignSelf: "center",
-      marginRight: "8px",
-      fontSize: "12px",
-      background: "#0CB3B3 !important",
-      borderColor: "rgba(0, 0, 0, 0) !important",
-      ":hover": {
-        ...commonStyle,
-        background: "#50CCC4 !important",
-      },
-      ":focus": {
-        ...commonStyle,
-        background: "#50CCC4 !important",
-      },
-      ":active": {
-        ...commonStyle,
-        background: "#089494 !important",
-      },
-    };
-  }, []);
-
-  const renderModal = useCallback(
-    () => (
-      <Modal
-        title="Авторизация"
-        visible={isModalVisible}
-        onOk={handleOk}
-        onCancel={handleCancel}
-        centered={true}
-        width={440}
-        zIndex={5000}
-        focusTriggerAfterClose={false}
-        footer={null}
-      >
-        <Form
-          name="basic"
-          labelCol={{ span: 0 }}
-          wrapperCol={{ span: 24 }}
-          initialValues={{ remember: false }}
-          onFinish={onFinish}
-          onFinishFailed={onFinishFailed}
-          autoComplete="off"
-        >
-          <Form.Item name="username" rules={[{ required: true, message: "" }]}>
-            <Input placeholder="Логин" />
-          </Form.Item>
-
-          <Form.Item name="password" rules={[{ required: true, message: "" }]}>
-            <Input.Password placeholder="Пароль" />
-          </Form.Item>
-
-          <Form.Item wrapperCol={{ span: 24 }}>
-            <Button
-              type="primary"
-              htmlType="submit"
-              css={[
-                buttonStyle,
-                {
-                  height: "40px",
-                  width: "100%",
-                  fontSize: "18px",
-                  marginTop: "10px",
-                },
-              ]}
-            >
-              Войти в систему
-            </Button>
-          </Form.Item>
-        </Form>
-      </Modal>
-    ),
-    [
-      buttonStyle,
-      handleCancel,
-      handleOk,
-      isModalVisible,
-      onFinish,
-      onFinishFailed,
-    ]
-  );
 
   return (
     <>
@@ -142,8 +48,12 @@ const Header: FC<IHeaderProps> = () => {
           }
         </div>
         <div css={{ height: "48px", display: "flex" }}>
-          <Button type="primary" css={buttonStyle} onClick={showModal}>
-            Войти
+          <Button
+            type="primary"
+            css={buttonStyle}
+            onClick={isAuthorized ? undefined : showModal}
+          >
+            {isAuthorized ? "Выйти" : "Войти"}
           </Button>
           <Avatar
             css={{
@@ -158,7 +68,11 @@ const Header: FC<IHeaderProps> = () => {
           </Avatar>
         </div>
       </AntHeader>
-      {renderModal()}
+      <AuthModal
+        handleCancel={handleCancel}
+        handleOk={handleOk}
+        isModalVisible={isModalVisible}
+      />
     </>
   );
 };
