@@ -1,9 +1,11 @@
 /** @jsxImportSource @emotion/react */
 import { Button, Form, Input, InputNumber, Modal } from "antd";
+import moment from "moment";
 import { FC, useCallback, useRef, useState } from "react";
 import { useDrop } from "react-dnd";
 import { buttonStyle } from "../../styles/style";
 import { IDateFullCellProps } from "./DateFullCell.types";
+import mainLogo from "../../styles/msh.jpg";
 
 const DateFullCell: FC<IDateFullCellProps> = (props) => {
   const { date } = props;
@@ -107,15 +109,31 @@ const DateFullCell: FC<IDateFullCellProps> = (props) => {
     []
   );
 
+  let resultClassName;
+
+  if (moment().date() === date.date()) {
+    resultClassName =
+      "ant-picker-cell-inner ant-picker-calendar-date ant-picker-calendar-date-today";
+  } else {
+    resultClassName = "ant-picker-cell-inner ant-picker-calendar-date";
+  }
+
   return (
     <>
       <div
         ref={dropRef}
-        className="ant-picker-cell-inner ant-picker-calendar-date"
-        css={{ backgroundColor: isOver ? "black" : undefined }}
+        className={resultClassName}
+        css={{ backgroundColor: isOver ? "#f5f5f5" : undefined }}
       >
         <div className="ant-picker-calendar-date-value">{date.date()}</div>
-        <div className="ant-picker-calendar-date-content"></div>
+        <div
+          className="ant-picker-calendar-date-content"
+          css={{ textAlign: "center !important" as any }}
+        >
+          {date.date() === 3 && date.month() === 8 && (
+            <img src={mainLogo} width="50px" height="50px" alt="msh" />
+          )}
+        </div>
       </div>
       {renderModal()}
     </>
