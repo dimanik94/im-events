@@ -2,14 +2,13 @@
 import { FC, useCallback, useState } from "react";
 import type { IHeaderProps } from "./Header.types";
 import { Header as AntHeader } from "antd/lib/layout/layout";
-import { wrapperStyle } from "./Header.styles";
+import { avatarStyle, buttonWrapperStyle, wrapperStyle } from "./Header.styles";
 import { Avatar, Button } from "antd";
 import AuthModal from "../AuthModal/AuthModal";
 import { buttonStyle } from "../../styles/style";
 
-const Header: FC<IHeaderProps> = () => {
+const Header: FC<IHeaderProps> = ({ isAuthorized, setIsAuthorized }) => {
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const [isAuthorized, setIsAuthorized] = useState(false); // todo: флаг авторизации
 
   const showModal = useCallback(() => {
     setIsModalVisible(true);
@@ -23,10 +22,18 @@ const Header: FC<IHeaderProps> = () => {
     setIsModalVisible(false);
   }, []);
 
+  const handleLogout = useCallback(() => {
+    localStorage.removeItem("id");
+    localStorage.removeItem("letter");
+    localStorage.removeItem("role");
+
+    setIsAuthorized(false);
+  }, [setIsAuthorized]);
+
   return (
     <>
       <AntHeader css={wrapperStyle}>
-        <div>
+        <div css={{ display: "flex" }}>
           {
             <svg
               width="50"
@@ -46,32 +53,40 @@ const Header: FC<IHeaderProps> = () => {
               />
             </svg>
           }
+          <div
+            css={{
+              height: "48px",
+              display: "flex",
+              alignContent: "center",
+              lineHeight: "48px",
+              fontSize: "14px",
+              fontWeight: 500,
+              paddingLeft: "8px",
+            }}
+          >
+            Календарь
+          </div>
         </div>
-        <div css={{ height: "48px", display: "flex" }}>
+        <div css={buttonWrapperStyle}>
           <Button
             type="primary"
             css={buttonStyle}
-            onClick={isAuthorized ? undefined : showModal}
+            onClick={isAuthorized ? handleLogout : showModal}
           >
             {isAuthorized ? "Выйти" : "Войти"}
           </Button>
-          <Avatar
-            css={{
-              fontSize: "12px",
-              color: "#fff",
-              backgroundColor: "#FA8C16",
-              alignSelf: "center",
-            }}
-            size={20}
-          >
-            {"U"?.toUpperCase() ?? ""}
-          </Avatar>
+          {isAuthorized && (
+            <Avatar css={avatarStyle} size={20}>
+              {localStorage.getItem("letter")?.toUpperCase() ?? ""}
+            </Avatar>
+          )}
         </div>
       </AntHeader>
       <AuthModal
         handleCancel={handleCancel}
         handleOk={handleOk}
         isModalVisible={isModalVisible}
+        setIsAuthorized={setIsAuthorized}
       />
     </>
   );

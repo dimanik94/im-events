@@ -6,3 +6,12 @@ export const wrapperStyle = {
   color: "white",
   padding: "0 8px 0 0 !important",
 };
+
+export const buttonWrapperStyle = { height: "48px", display: "flex" };
+
+export const avatarStyle = {
+  fontSize: "12px",
+  color: "#fff",
+  backgroundColor: "#FA8C16",
+  alignSelf: "center",
+};

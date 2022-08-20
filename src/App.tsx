@@ -1,6 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import { Layout } from "antd";
-import { FC } from "react";
+import { FC, useState } from "react";
 import "./App.css";
 import "antd/dist/antd.min.css";
 import Header from "./components/Header/Header";
@@ -22,11 +22,15 @@ moment.updateLocale("ru", {
 } as moment.LocaleSpecification);
 
 const App: FC = () => {
+  const [isAuthorized, setIsAuthorized] = useState(
+    !!localStorage.getItem("id")
+  );
+
   return (
     <ConfigProvider locale={ruRu}>
       <Global styles={appStyle} />
       <Layout style={{ height: "100%" }}>
-        <Header />
+        <Header isAuthorized={isAuthorized} setIsAuthorized={setIsAuthorized} />
         <Layout style={layoutMainStyle}>
           <DndProvider backend={HTML5Backend}>
             <Main />
