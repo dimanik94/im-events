@@ -1,34 +1,165 @@
 /** @jsxImportSource @emotion/react */
-import { FC } from "react";
+import { FC, useCallback, useMemo, useState } from "react";
 import type { IHeaderProps } from "./Header.types";
 import { Header as AntHeader } from "antd/lib/layout/layout";
-import { logoStyle, wrapperStyle } from "./Header.styles";
-import { Avatar, Button } from "antd";
+import { wrapperStyle } from "./Header.styles";
+import { Avatar, Button, Form, Input, Modal } from "antd";
 
 const Header: FC<IHeaderProps> = () => {
+  const [isModalVisible, setIsModalVisible] = useState(false);
+
+  const onFinish = useCallback((values: any) => {
+    console.log("Success:", values);
+  }, []);
+
+  const onFinishFailed = useCallback((errorInfo: any) => {
+    console.log("Failed:", errorInfo);
+  }, []);
+
+  const showModal = useCallback(() => {
+    setIsModalVisible(true);
+  }, []);
+
+  const handleOk = useCallback(() => {
+    setIsModalVisible(false);
+  }, []);
+
+  const handleCancel = useCallback(() => {
+    setIsModalVisible(false);
+  }, []);
+
+  const buttonStyle = useMemo(() => {
+    const commonStyle = {
+      color: "#fff !important",
+      fill: "#fff !important",
+      borderColor: "rgba(0, 0, 0, 0) !important",
+    };
+
+    return {
+      height: "28px",
+      alignSelf: "center",
+      marginRight: "8px",
+      fontSize: "12px",
+      background: "#0CB3B3 !important",
+      borderColor: "rgba(0, 0, 0, 0) !important",
+      ":hover": {
+        ...commonStyle,
+        background: "#50CCC4 !important",
+      },
+      ":focus": {
+        ...commonStyle,
+        background: "#50CCC4 !important",
+      },
+      ":active": {
+        ...commonStyle,
+        background: "#089494 !important",
+      },
+    };
+  }, []);
+
+  const renderModal = useCallback(
+    () => (
+      <Modal
+        title="Авторизация"
+        visible={isModalVisible}
+        onOk={handleOk}
+        onCancel={handleCancel}
+        centered={true}
+        width={440}
+        zIndex={5000}
+        focusTriggerAfterClose={false}
+        footer={null}
+      >
+        <Form
+          name="basic"
+          labelCol={{ span: 0 }}
+          wrapperCol={{ span: 24 }}
+          initialValues={{ remember: false }}
+          onFinish={onFinish}
+          onFinishFailed={onFinishFailed}
+          autoComplete="off"
+        >
+          <Form.Item name="username" rules={[{ required: true, message: "" }]}>
+            <Input placeholder="Логин" />
+          </Form.Item>
+
+          <Form.Item name="password" rules={[{ required: true, message: "" }]}>
+            <Input.Password placeholder="Пароль" />
+          </Form.Item>
+
+          <Form.Item wrapperCol={{ span: 24 }}>
+            <Button
+              type="primary"
+              htmlType="submit"
+              css={[
+                buttonStyle,
+                {
+                  height: "40px",
+                  width: "100%",
+                  fontSize: "18px",
+                  marginTop: "10px",
+                },
+              ]}
+            >
+              Войти в систему
+            </Button>
+          </Form.Item>
+        </Form>
+      </Modal>
+    ),
+    [
+      buttonStyle,
+      handleCancel,
+      handleOk,
+      isModalVisible,
+      onFinish,
+      onFinishFailed,
+    ]
+  );
+
   return (
-    <AntHeader css={wrapperStyle}>
-      <div css={logoStyle}>ЛОГО</div>
-      <div css={{ height: "48px", display: "flex" }}>
-        <Button
-          type="primary"
-          css={{ height: "28px", alignSelf: "center", marginRight: "8px" }}
-        >
-          Войти
-        </Button>
-        <Avatar
-          css={{
-            fontSize: "12px",
-            color: "#fff",
-            backgroundColor: "#FA8C16",
-            alignSelf: "center",
-          }}
-          size={20}
-        >
-          {"U"?.toUpperCase() ?? ""}
-        </Avatar>
-      </div>
-    </AntHeader>
+    <>
+      <AntHeader css={wrapperStyle}>
+        <div>
+          {
+            <svg
+              width="50"
+              height="48"
+              viewBox="0 0 50 48"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <rect width="50" height="48" fill="#2C2C2C" />
+              <path
+                d="M17.1436 18.2445H14V29.2507H17.1436V18.2445Z"
+                fill="#F5F5F5"
+              />
+              <path
+                d="M29.8904 29.2508H26.7904V23.3586C26.7904 21.7577 26.172 20.9572 24.935 20.9572C24.3381 20.9572 23.8652 21.1944 23.5161 21.6687C23.1666 22.143 22.9919 22.7138 22.9919 23.3808V29.2508H19.8486V18.2668H22.5991L22.8175 19.512C23.3705 18.5188 24.3162 18.0222 25.6554 18.0222C27.1541 18.0222 28.2021 18.7041 28.7987 20.0678C29.2789 19.3267 29.7958 18.8004 30.3487 18.4892C30.9017 18.1631 31.5784 18 32.3789 18C33.6595 18 34.6929 18.4002 35.4788 19.2007C36.279 20.0011 36.6794 21.35 36.6794 23.2474V29.2508H33.5139V23.3141C33.5139 21.7873 32.9682 21.0239 31.8769 21.0239C31.2802 21.0239 30.7998 21.2537 30.4361 21.7132C30.0721 22.1579 29.8904 22.7063 29.8904 23.3586V29.2508Z"
+                fill="#F5F5F5"
+              />
+            </svg>
+          }
+        </div>
+        <div css={{ height: "48px", display: "flex" }}>
+          <Button type="primary" css={buttonStyle} onClick={showModal}>
+            Войти
+          </Button>
+          <Avatar
+            css={{
+              fontSize: "12px",
+              color: "#fff",
+              backgroundColor: "#FA8C16",
+              alignSelf: "center",
+            }}
+            size={20}
+          >
+            {"U"?.toUpperCase() ?? ""}
+          </Avatar>
+        </div>
+      </AntHeader>
+      {renderModal()}
+    </>
   );
 };
 
