@@ -4,6 +4,7 @@ import { Calendar as AntCalendar } from "antd";
 import { CalendarProps } from "antd/lib/calendar/generateCalendar";
 import { Moment } from "moment";
 import DateFullCell from "../DateFullCell/DateFullCell";
+import moment from "moment";
 // import locale from "../../locale";
 
 const Calendar: FC = () => {
