@@ -1,17 +1,46 @@
 /** @jsxImportSource @emotion/react */
 import { Button, Form, Input, Modal } from "antd";
-import { FC, useCallback } from "react";
+import { FC, useCallback, useState } from "react";
 import { buttonStyle } from "../../styles/style";
+import { baseUrl } from "../../utils/const";
+import { fetchData } from "../../utils/fetch/fetchData";
 import type { IAuthModalProps } from "./AuthModal.types";
 
 const AuthModal: FC<IAuthModalProps> = ({
   handleCancel,
   handleOk,
   isModalVisible,
+  setIsAuthorized,
 }) => {
-  const onFinish = useCallback((values: any) => {
-    console.log("Success:", values);
-  }, []);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const onFinish = useCallback(
+    (values: { username: string; password: string }) => {
+      console.log("Success:", values);
+      setIsLoading(true);
+
+      fetchData(
+        `${baseUrl}employees/check?login=${values.username}&password=${values.password}`
+      )
+        .then((res) => {
+          localStorage.setItem("id", res.id);
+          localStorage.setItem("letter", (res.userName as string).slice(0, 1));
+        })
+        .then(() => {
+          fetchData(
+            `${baseUrl}role/employee/${localStorage.getItem("id")}`
+          ).then((res) => {
+            localStorage.setItem("role", res.type);
+            handleCancel();
+            setIsAuthorized(true);
+          });
+        })
+        .finally(() => {
+          setIsLoading(false);
+        });
+    },
+    [handleCancel, setIsAuthorized]
+  );
 
   const onFinishFailed = useCallback((errorInfo: any) => {
     console.log("Failed:", errorInfo);
@@ -50,6 +79,8 @@ const AuthModal: FC<IAuthModalProps> = ({
           <Button
             type="primary"
             htmlType="submit"
+            disabled={isLoading}
+            loading={isLoading}
             css={[
               buttonStyle,
               {

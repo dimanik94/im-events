@@ -7,9 +7,8 @@ import { Avatar, Button } from "antd";
 import AuthModal from "../AuthModal/AuthModal";
 import { buttonStyle } from "../../styles/style";
 
-const Header: FC<IHeaderProps> = () => {
+const Header: FC<IHeaderProps> = ({ isAuthorized, setIsAuthorized }) => {
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const [isAuthorized, setIsAuthorized] = useState(false); // todo: флаг авторизации
 
   const showModal = useCallback(() => {
     setIsModalVisible(true);
@@ -22,6 +21,14 @@ const Header: FC<IHeaderProps> = () => {
   const handleCancel = useCallback(() => {
     setIsModalVisible(false);
   }, []);
+
+  const handleLogout = useCallback(() => {
+    localStorage.removeItem("id");
+    localStorage.removeItem("letter");
+    localStorage.removeItem("role");
+
+    setIsAuthorized(false);
+  }, [setIsAuthorized]);
 
   return (
     <>
@@ -51,27 +58,30 @@ const Header: FC<IHeaderProps> = () => {
           <Button
             type="primary"
             css={buttonStyle}
-            onClick={isAuthorized ? undefined : showModal}
+            onClick={isAuthorized ? handleLogout : showModal}
           >
             {isAuthorized ? "Выйти" : "Войти"}
           </Button>
-          <Avatar
-            css={{
-              fontSize: "12px",
-              color: "#fff",
-              backgroundColor: "#FA8C16",
-              alignSelf: "center",
-            }}
-            size={20}
-          >
-            {"U"?.toUpperCase() ?? ""}
-          </Avatar>
+          {isAuthorized && (
+            <Avatar
+              css={{
+                fontSize: "12px",
+                color: "#fff",
+                backgroundColor: "#FA8C16",
+                alignSelf: "center",
+              }}
+              size={20}
+            >
+              {localStorage.getItem("letter")?.toUpperCase() ?? ""}
+            </Avatar>
+          )}
         </div>
       </AntHeader>
       <AuthModal
         handleCancel={handleCancel}
         handleOk={handleOk}
         isModalVisible={isModalVisible}
+        setIsAuthorized={setIsAuthorized}
       />
     </>
   );
