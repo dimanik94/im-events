@@ -54,6 +54,7 @@ const Calendar: FC = () => {
       // dateCellRender={dateCellRender}
       // monthCellRender={monthCellRender}
       // locale={locale}
+      disabledDate={(date) => date < moment(moment.now())}
     />
   );
 };
