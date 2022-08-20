@@ -1,0 +1,81 @@
+{
+  "folders": [
+    {
+      "path": "."
+    }
+  ],
+  "settings": {
+    "files.encoding": "utf8",
+    "files.autoSave": "onWindowChange",
+    "todohighlight.isEnable": true,
+    "todohighlight.isCaseSensitive": false,
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "todohighlight.keywords": [
+      {
+        "text": "todo:",
+        "color": "red"
+      },
+      {
+        "text": "fixme:",
+        "color": "red",
+        "borderRadius": "3px",
+        "border": "1px solid red",
+        "backgroundColor": "#000"
+      },
+      {
+        "text": "@deprecated",
+        "color": "red",
+        "border": "1px solid red",
+        "backgroundColor": "blue"
+      }
+    ],
+    "todohighlight.exclude": [
+      "**/node_modules/**",
+      "**/bower_components/**",
+      "**/dist/**",
+      "**/build/**",
+      "**/.vscode/**",
+      "**/.github/**",
+      "**/_output/**",
+      "**/*.min.*",
+      "**/*.map",
+      "**/.next/**"
+    ],
+    "breadcrumbs.enabled": true,
+    "typescript.tsdk": "node_modules/typescript/lib",
+    "typescript.enablePromptUseWorkspaceTsdk": true,
+    "javascript.format.enable": false,
+    "typescript.format.enable": false,
+    "editor.formatOnSave": true,
+    "[handlebars]": { "editor.formatOnSave": false },
+    "editor.rulers": [100],
+    "workbench.activityBar.visible": true,
+    "editor.tabSize": 2,
+    "workbench.editor.tabSizing": "shrink",
+    "workbench.editor.limit.enabled": true,
+    "files.eol": "\n",
+    "workbench.editor.enablePreview": false,
+    "files.watcherExclude": {
+      "/**/.git/**": true,
+      "/**/node_modules/**": true,
+      "/**/_release/**": true
+    },
+    "git.enableSmartCommit": true,
+    "git.promptToSaveFilesBeforeCommit": true,
+    "git.showPushSuccessNotification": true,
+    "git.detectSubmodulesLimit": 100,
+    "typescript.surveys.enabled": false,
+    "cSpell.language": "en,ru",
+    "search.exclude": {
+      "**/node_modules": true,
+      "**/bower_components": true,
+      "**/*.code-search": true,
+      "**/*CHANGELOG.md": true,
+      "**/yarn.lock": true,
+      "/assets/generator.html": true,
+      "**/.eslintcache": true
+    },
+    "editor.bracketPairColorization.enabled": true,
+    "importer.view.addingPrefixPath": "@im/"
+  }
+}

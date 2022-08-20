@@ -1,26 +1,28 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+/** @jsxImportSource @emotion/react */
+import { Layout } from "antd";
+import { Content, Header } from "antd/lib/layout/layout";
+import Sider from "antd/lib/layout/Sider";
+import { FC } from "react";
+import "./App.css";
 
-function App() {
+const App: FC = () => {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Layout style={{ height: "100%" }}>
+      <Header
+        style={{ backgroundColor: "#2c2c2c", height: 48, color: "white" }}
+      >
+        Header
+      </Header>
+      <Layout
+        style={{ height: "calc(100% - 48px)", display: "flex", flex: "auto" }}
+      >
+        <Sider css={{ borderRight: "1px solid gray" }}>Sider</Sider>
+        <Content style={{ width: "100%" }}>
+          <div css={{ color: "red" }}>Content</div>
+        </Content>
+      </Layout>
+    </Layout>
   );
-}
+};
 
 export default App;
