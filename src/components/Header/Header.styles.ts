@@ -1,5 +1,3 @@
-// import LogoSvg from "../../resources/icons/Logo.svg";
-
 export const wrapperStyle = {
   display: "flex",
   justifyContent: "space-between",
@@ -7,8 +5,4 @@ export const wrapperStyle = {
   height: "48px !important",
   color: "white",
   padding: "0 8px !important",
-};
-
-export const logoStyle = {
-  // backgroundImage: `url(${LogoSvg})`,
 };
