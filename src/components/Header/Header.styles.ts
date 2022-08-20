@@ -4,5 +4,5 @@ export const wrapperStyle = {
   backgroundColor: "#2c2c2c",
   height: "48px !important",
   color: "white",
-  padding: "0 8px !important",
+  padding: "0 8px 0 0 !important",
 };
