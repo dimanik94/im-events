@@ -22,7 +22,7 @@ export type TCalendarEvent = {
   id: number;
   name: string;
   description: string;
-  minNumber: 5;
+  minNumber: number;
   date: [number, number, number];
   employees: TEmployee[];
 };
