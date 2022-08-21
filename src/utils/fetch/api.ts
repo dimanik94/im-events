@@ -28,3 +28,20 @@ export const postData = (url: string, body: any): Promise<any> =>
       return res.json();
     })
     .then((res) => res);
+
+/**
+ * @param url
+ * @returns JSON-объект
+ */
+export const putData = (url: string): Promise<any> =>
+  fetch(url, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    // body: JSON.stringify(body),
+  })
+    .then((res) => {
+      return res.json();
+    })
+    .then((res) => res);
