@@ -26,8 +26,6 @@ const App: FC = () => {
     !!localStorage.getItem("id")
   );
 
-  console.log("isAuthorized", isAuthorized);
-
   return (
     <ConfigProvider locale={ruRu}>
       <Global styles={appStyle} />

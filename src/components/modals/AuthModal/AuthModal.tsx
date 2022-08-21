@@ -17,7 +17,6 @@ const AuthModal: FC<IAuthModalProps> = ({
 
   const onFinish = useCallback(
     (values: { username: string; password: string }) => {
-      console.log("Success:", values);
       setIsLoading(true);
 
       fetchData(
@@ -37,7 +36,6 @@ const AuthModal: FC<IAuthModalProps> = ({
           });
         })
         .catch((error) => {
-          console.log("error", error);
           setHasError(true);
         })
         .finally(() => {
