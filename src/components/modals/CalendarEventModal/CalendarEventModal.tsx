@@ -68,8 +68,8 @@ const CalendarEventModal: FC<ICalendarEventModalProps> = ({
       postData(`${baseUrl}comment/${localStorage.getItem("id")}`, {
         message: values.message,
         dateTime: `${moment().format("YYYY-MM-DD")}T${moment().format(
-          "HH:mm"
-        )}:00.751Z`,
+          "HH:mm:ss"
+        )}.751Z`,
       })
         .then((commentID) => {
           putData(
