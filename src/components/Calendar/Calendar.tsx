@@ -55,7 +55,6 @@ const Calendar: FC<{ isAuthorized: boolean }> = (props) => {
     async function fetchData() {
       fetch(`${baseUrl}/calendar-events/all`).then((body) => {
         body.json().then((res: TCalendarEvent[]) => {
-          console.log("res", res);
           const preparedRes: Record<string, any> = {};
 
           forEach(res, (calendar) => {

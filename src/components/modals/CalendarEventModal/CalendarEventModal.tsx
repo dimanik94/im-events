@@ -38,6 +38,8 @@ const CalendarEventModal: FC<ICalendarEventModalProps> = ({
     }[]
   >([]);
 
+  const [form] = Form.useForm();
+
   useEffect(() => {
     async function fetchData() {
       fetch(`${baseUrl}calendar-events/${eventId}`).then((body) => {
@@ -67,7 +69,7 @@ const CalendarEventModal: FC<ICalendarEventModalProps> = ({
       })
         .then((commentID) => {
           putData(
-            `${baseUrl}comment/calendar-events/?calendarEventId=${eventId}&commentId=${commentID.toString()}`
+            `${baseUrl}comment/calendar-events/?calendarEventId=${eventId}&commentId=${commentID}`
           );
         })
         .then(() => {
@@ -82,14 +84,14 @@ const CalendarEventModal: FC<ICalendarEventModalProps> = ({
                 (body) => {
                   body.json().then((res) => {
                     setComment(res);
+                    form.resetFields();
                   });
                 }
               );
             });
-        })
-        .finally(() => {});
+        });
     },
-    [eventId]
+    [eventId, form]
   );
 
   if (!data) {
@@ -115,7 +117,9 @@ const CalendarEventModal: FC<ICalendarEventModalProps> = ({
         {data.description}
       </div>
       <div>{`Дата проведения: ${data.date[2]}.${data.date[1]}.${data.date[0]}`}</div>
-      {/* <div>{data.minNumber}</div> */}
+      <div>{`Минимальное количество участников: ${
+        data.minNumber === 0 ? "не ограничено" : data.minNumber
+      }`}</div>
       <div
         css={{
           marginTop: "12px",
@@ -154,7 +158,7 @@ const CalendarEventModal: FC<ICalendarEventModalProps> = ({
         ) : (
           map(comments, (comment, key) => (
             <div
-              key={key}
+              key={`${key}_${comment.id}`}
               css={{
                 border: "1px solid #d9d9d9",
                 padding: "4px",
@@ -190,6 +194,7 @@ const CalendarEventModal: FC<ICalendarEventModalProps> = ({
       </div>
 
       <Form
+        form={form}
         name="auth-form"
         labelCol={{ span: 0 }}
         wrapperCol={{ span: 24 }}

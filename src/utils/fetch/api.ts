@@ -38,12 +38,7 @@ export const putData = (url: string): Promise<any> =>
     headers: {
       "Content-Type": "application/json",
     },
-    // body: JSON.stringify(body),
-  })
-    .then((res) => {
-      return res.json();
-    })
-    .then((res) => res);
+  }).then((res) => res);
 
 /**
  * @param url
