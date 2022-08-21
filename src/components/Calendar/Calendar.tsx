@@ -173,7 +173,7 @@ const Calendar: FC = () => {
       // dateCellRender={dateCellRender}
       // monthCellRender={monthCellRender}
       // locale={locale}
-      disabledDate={(date) => isDateDisabled(date)}
+      // disabledDate={(date) => isDateDisabled(date)}
       css={{
         padding: "8px 16px",
         ".ant-picker-calendar-date-today": {
