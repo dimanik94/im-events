@@ -22,7 +22,7 @@ export type TCalendarEvent = {
   id: number;
   name: string;
   description: string;
-  minNumber: 5;
+  minNumber: number;
   date: [number, number, number];
   employees: TEmployee[];
 };
@@ -121,6 +121,7 @@ const Calendar: FC = () => {
           date={date}
           isDisabled={isDateDisabled(date)}
           calendarEvent={calendarEvents?.[calendarEventKey]}
+          setCalendarEvents={setCalendarEvents}
         />
       );
     },

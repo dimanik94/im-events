@@ -7,13 +7,14 @@ import { useDrop } from "react-dnd";
 import { buttonStyle } from "../../styles/style";
 import { IDateFullCellProps } from "./DateFullCell.types";
 import mainLogo from "../../styles/msh.jpg";
-import { isEmpty, isNumber, isUndefined } from "lodash";
+import { forEach, isEmpty, isNumber, isUndefined } from "lodash";
 import CalendarEventModal from "../modals/CalendarEventModal/CalendarEventModal";
 import { baseUrl } from "../../utils/const";
 import { fetchData, postData } from "../../utils/fetch/api";
+import { TCalendarEvent } from "../Calendar/Calendar";
 
 const DateFullCell: FC<IDateFullCellProps> = (props) => {
-  const { date, isDisabled, calendarEvent } = props;
+  const { date, isDisabled, calendarEvent, setCalendarEvents } = props;
 
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isInfoModalVisible, setIsInfoModalVisible] = useState(false);
@@ -50,11 +51,27 @@ const DateFullCell: FC<IDateFullCellProps> = (props) => {
             handleCancel();
           });
         })
+        .then(() => {
+          fetch(`${baseUrl}/calendar-events/all`).then((body) => {
+            body.json().then((res: TCalendarEvent[]) => {
+              console.log("res", res);
+              const preparedRes: Record<string, any> = {};
+
+              forEach(res, (calendar) => {
+                const preparedKey = `${calendar.date.join(".")}`;
+
+                preparedRes[preparedKey] = calendar;
+              });
+
+              setCalendarEvents(preparedRes);
+            });
+          });
+        })
         .finally(() => {
           // setIsLoading(false);
         });
     },
-    [date, handleCancel]
+    [date, handleCancel, setCalendarEvents]
   );
 
   const onFinishFailed = useCallback((errorInfo: any) => {
@@ -159,15 +176,28 @@ const DateFullCell: FC<IDateFullCellProps> = (props) => {
   }
 
   const percent = useMemo(() => {
+    const minNumber = calendarEvent?.minNumber;
+    const employeesLength = calendarEvent?.employees.length;
+
     if (
-      isNumber(calendarEvent?.minNumber) &&
-      calendarEvent?.employees.length === calendarEvent?.minNumber
+      (minNumber === 0 && employeesLength === 0) ||
+      (minNumber === 1 && employeesLength === 0)
     ) {
+      return 0;
+    }
+
+    if (minNumber === 0 && employeesLength === 1) {
       return 100;
     }
 
-    return 20;
+    if (isNumber(minNumber) && isNumber(employeesLength)) {
+      return (employeesLength / minNumber) * 100;
+    }
   }, [calendarEvent?.minNumber, calendarEvent?.employees]);
+
+  const isShowProgressBar = useMemo(() => {
+    return Boolean(calendarEvent?.name);
+  }, [calendarEvent?.name]);
 
   return (
     <>
@@ -189,7 +219,7 @@ const DateFullCell: FC<IDateFullCellProps> = (props) => {
           }}
         >
           <div>{date.date()}</div>
-          {calendarEvent?.name && (
+          {isShowProgressBar && (
             <Progress
               percent={percent}
               size="small"
