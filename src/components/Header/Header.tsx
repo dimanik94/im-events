@@ -4,7 +4,7 @@ import type { IHeaderProps } from "./Header.types";
 import { Header as AntHeader } from "antd/lib/layout/layout";
 import { avatarStyle, buttonWrapperStyle, wrapperStyle } from "./Header.styles";
 import { Avatar, Button } from "antd";
-import AuthModal from "../AuthModal/AuthModal";
+import AuthModal from "../modals/AuthModal/AuthModal";
 import { buttonStyle } from "../../styles/style";
 
 const Header: FC<IHeaderProps> = ({ isAuthorized, setIsAuthorized }) => {
@@ -12,10 +12,6 @@ const Header: FC<IHeaderProps> = ({ isAuthorized, setIsAuthorized }) => {
 
   const showModal = useCallback(() => {
     setIsModalVisible(true);
-  }, []);
-
-  const handleOk = useCallback(() => {
-    setIsModalVisible(false);
   }, []);
 
   const handleCancel = useCallback(() => {
@@ -84,7 +80,6 @@ const Header: FC<IHeaderProps> = ({ isAuthorized, setIsAuthorized }) => {
       </AntHeader>
       <AuthModal
         handleCancel={handleCancel}
-        handleOk={handleOk}
         isModalVisible={isModalVisible}
         setIsAuthorized={setIsAuthorized}
       />
