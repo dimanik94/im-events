@@ -295,7 +295,13 @@ const DateFullCell: FC<IDateFullCellProps> = (props) => {
             {calendarEvent?.description}
           </div>
           {date.date() === 3 && date.month() === 8 && (
-            <img src={mainLogo} width="50px" height="50px" alt="msh" />
+            <img
+              src={mainLogo}
+              width="50px"
+              height="50px"
+              alt="msh"
+              style={{ margin: "auto" }}
+            />
           )}
         </div>
       </div>

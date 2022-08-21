@@ -28,9 +28,9 @@ export type TCalendarEvent = {
 };
 
 const isDateDisabled = (currentDate: Moment) => {
-  if (currentDate.date() === 3 && currentDate.month() === 8) {
-    return true;
-  }
+  // if (currentDate.date() === 3 && currentDate.month() === 8) {
+  //   return true;
+  // }
 
   const currentDateMoment = moment()
     .set("date", currentDate.date())
