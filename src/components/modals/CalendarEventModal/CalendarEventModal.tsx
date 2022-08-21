@@ -51,7 +51,6 @@ const CalendarEventModal: FC<ICalendarEventModalProps> = ({
       fetchData().then(() => {
         fetch(`${baseUrl}/comment/calendar-events/${eventId}`).then((body) => {
           body.json().then((res) => {
-            console.log("res", res);
             setComment(res);
           });
         });
@@ -60,11 +59,6 @@ const CalendarEventModal: FC<ICalendarEventModalProps> = ({
 
   const onFinish = useCallback(
     (values: { message: string }) => {
-      console.log("Success:", values);
-      // setIsLoading(true);
-
-      console.log('moment().format("YYYY-MM-DD HH-MM")', moment());
-
       postData(`${baseUrl}comment/${localStorage.getItem("id")}`, {
         message: values.message,
         dateTime: `${moment().format("YYYY-MM-DD")}T${moment().format(
@@ -87,7 +81,6 @@ const CalendarEventModal: FC<ICalendarEventModalProps> = ({
               fetch(`${baseUrl}/comment/calendar-events/${eventId}`).then(
                 (body) => {
                   body.json().then((res) => {
-                    console.log("res", res);
                     setComment(res);
                   });
                 }

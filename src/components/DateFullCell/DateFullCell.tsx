@@ -7,7 +7,7 @@ import { useDrop } from "react-dnd";
 import { buttonStyle } from "../../styles/style";
 import { IDateFullCellProps } from "./DateFullCell.types";
 import mainLogo from "../../styles/msh.jpg";
-import { find, forEach, isEmpty, isNumber, isUndefined } from "lodash";
+import { find, forEach, isNumber, isUndefined } from "lodash";
 import CalendarEventModal from "../modals/CalendarEventModal/CalendarEventModal";
 import { baseUrl } from "../../utils/const";
 import {
@@ -19,8 +19,7 @@ import {
 import { TCalendarEvent } from "../Calendar/Calendar";
 
 const DateFullCell: FC<IDateFullCellProps> = (props) => {
-  const { date, isDisabled, calendarEvent, setCalendarEvents, isAuthorized } =
-    props;
+  const { date, calendarEvent, setCalendarEvents, isAuthorized } = props;
 
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isInfoModalVisible, setIsInfoModalVisible] = useState(false);
@@ -57,9 +56,6 @@ const DateFullCell: FC<IDateFullCellProps> = (props) => {
       description: string;
       minMembers: number;
     }) => {
-      console.log("Success:", values);
-      // setIsLoading(true);
-
       postData(`${baseUrl}calendar-events`, {
         name: values.eventName,
         description: values.description ?? "",
@@ -68,14 +64,12 @@ const DateFullCell: FC<IDateFullCellProps> = (props) => {
       })
         .then(() => {
           fetchData(`${baseUrl}events/all`).then((res) => {
-            // setEvents(res);
             handleCancel();
           });
         })
         .then(() => {
           fetch(`${baseUrl}/calendar-events/all`).then((body) => {
             body.json().then((res: TCalendarEvent[]) => {
-              console.log("res", res);
               const preparedRes: Record<string, any> = {};
 
               forEach(res, (calendar) => {
@@ -88,16 +82,10 @@ const DateFullCell: FC<IDateFullCellProps> = (props) => {
             });
           });
         })
-        .finally(() => {
-          // setIsLoading(false);
-        });
+        .finally(() => {});
     },
     [date, handleCancel, setCalendarEvents]
   );
-
-  const onFinishFailed = useCallback((errorInfo: any) => {
-    console.log("Failed:", errorInfo);
-  }, []);
 
   const showInfoModal = useCallback(() => {
     setIsInfoModalVisible(true);
@@ -125,7 +113,6 @@ const DateFullCell: FC<IDateFullCellProps> = (props) => {
           wrapperCol={{ span: 24 }}
           initialValues={{ remember: false, eventName: event.current?.name }}
           onFinish={onFinish}
-          onFinishFailed={onFinishFailed}
           autoComplete="off"
         >
           <Form.Item name="eventName" rules={[{ required: true, message: "" }]}>
@@ -168,20 +155,17 @@ const DateFullCell: FC<IDateFullCellProps> = (props) => {
         </Form>
       </Modal>
     );
-  }, [handleCancel, isModalVisible, onFinish, onFinishFailed]);
+  }, [handleCancel, isModalVisible, onFinish]);
 
   const [{ isOver }, dropRef] = useDrop(
     () => ({
       accept: "EVENT",
       drop: (item: { name: string; type: string }) => {
-        console.log("drop item", item);
-        console.log("drop date", date);
-
         event.current = item;
-        showModal();
+        !calendarEvent && showModal();
       },
       collect: (monitor) => ({
-        isOver: !!monitor.isOver(),
+        isOver: !!monitor.isOver() && !calendarEvent,
       }),
     }),
     []

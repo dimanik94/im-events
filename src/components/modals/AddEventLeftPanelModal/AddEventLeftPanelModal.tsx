@@ -16,7 +16,6 @@ const AddEventLeftPanelModal: FC<IAddEventLeftPanelModalProps> = ({
 
   const onFinish = useCallback(
     (values: { eventName: string; eventType: string }) => {
-      console.log("Success:", values);
       setIsLoading(true);
 
       postData(`${baseUrl}events`, {
