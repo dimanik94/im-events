@@ -68,6 +68,9 @@ const DateFullCell: FC<IDateFullCellProps> = (props) => {
 
           <Form.Item name="minMembers" rules={[{ type: "number" }]}>
             <InputNumber placeholder="123" min={1} max={1000} />
+            <span className="ant-form-text">
+              Минимальное количество участников
+            </span>
           </Form.Item>
 
           <Form.Item wrapperCol={{ span: 24 }}>
