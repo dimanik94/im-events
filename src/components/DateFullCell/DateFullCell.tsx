@@ -391,7 +391,7 @@ const DateFullCell: FC<IDateFullCellProps> = (props) => {
         </div>
       )}
       {renderModal()}
-      {calendarEvent && calendarEvent.id && (
+      {calendarEvent && calendarEvent.id && isAuthorized && (
         <CalendarEventModal
           eventId={
             isInfoModalVisible ? calendarEvent?.id.toString() : undefined

@@ -16,7 +16,7 @@ const Main: FC<{ isAuthorized: boolean }> = (props) => {
           theme="light"
           css={{ borderRight: "1px solid #f0f0f0" }}
         >
-          <Events />
+          <Events isAuthorized={isAuthorized} />
         </Sider>
       )}
       <Content css={{ overflowY: "auto", position: "relative" }}>
