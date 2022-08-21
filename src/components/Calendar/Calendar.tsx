@@ -121,6 +121,7 @@ const Calendar: FC = () => {
           date={date}
           isDisabled={isDateDisabled(date)}
           calendarEvent={calendarEvents?.[calendarEventKey]}
+          setCalendarEvents={setCalendarEvents}
         />
       );
     },
