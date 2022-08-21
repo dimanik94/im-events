@@ -133,7 +133,7 @@ const Events: FC = () => {
 
   useEffect(() => {
     async function fetchData() {
-      fetch("http://192.168.89.79:8080/events/all").then((body) => {
+      fetch("http://192.168.89.177:8080//events/all").then((body) => {
         body.json().then((res) => {
           setEvents(res);
         });
