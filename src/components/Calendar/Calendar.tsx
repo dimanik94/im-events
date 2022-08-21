@@ -119,6 +119,7 @@ const Calendar: FC<{ isAuthorized: boolean }> = (props) => {
 
       return (
         <DateFullCell
+          key={calendarEventKey}
           date={date}
           isDisabled={isDateDisabled(date)}
           calendarEvent={calendarEvents?.[calendarEventKey]}
