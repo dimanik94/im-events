@@ -390,6 +390,7 @@ const DateFullCell: FC<IDateFullCellProps> = (props) => {
           }
           handleCancel={handleInfoCancel}
           isModalVisible={isInfoModalVisible}
+          calendarEvent={calendarEvent}
         />
       )}
     </>
