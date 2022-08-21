@@ -16,17 +16,24 @@ const CalendarEventModal: FC<ICalendarEventModalProps> = ({
     id: number;
     minNumber: number;
     name: string;
-  }>();
-  const [likes, setLikes] = useState<
-    {
+    employees: {
       birthday: string;
       id: number;
       login: string;
       password: string;
       surName: string;
       userName: string;
+    }[];
+  }>();
+
+  const [comments, setComment] = useState<
+    {
+      id: number;
+      message: string;
+      userName: string;
+      dateTime: Array<number>;
     }[]
-  >();
+  >([]);
 
   useEffect(() => {
     async function fetchData() {
@@ -39,10 +46,10 @@ const CalendarEventModal: FC<ICalendarEventModalProps> = ({
 
     eventId &&
       fetchData().then(() => {
-        fetch(`${baseUrl}employees/calendar-event/${eventId}`).then((body) => {
+        fetch(`${baseUrl}/comment/calendar-events/${eventId}`).then((body) => {
           body.json().then((res) => {
             console.log("res", res);
-            setLikes(res);
+            setComment(res);
           });
         });
       });
@@ -75,18 +82,67 @@ const CalendarEventModal: FC<ICalendarEventModalProps> = ({
       <div
         css={{
           marginTop: "12px",
-          fontStyle: likes && likes?.length > 0 ? "normal" : "italic",
+          fontStyle: data.employees?.length > 0 ? "normal" : "italic",
         }}
       >
-        {likes && likes?.length > 0 ? "Участники:" : "Участников пока нет"}
+        {data.employees.length > 0 ? "Участники:" : "Участников пока нет"}
       </div>
       <div>
-        {likes && likes?.length > 0 && (
+        {data.employees.length > 0 && (
           <ul>
-            {map(likes, (item, key) => (
+            {map(data.employees, (item, key) => (
               <li key={key}>{`${item.userName} ${item.surName}`}</li>
             ))}
           </ul>
+        )}
+      </div>
+
+      {/* комменты */}
+      <div
+        css={{
+          marginTop: "12px",
+        }}
+      >
+        Комментарии:
+        {comments && comments.length === 0 ? (
+          <div
+            css={{
+              fontStyle: "italic",
+              marginBottom: "12px",
+              color: "#8c8c8c",
+            }}
+          >
+            Комментариев пока нет
+          </div>
+        ) : (
+          map(comments, (comment, key) => (
+            <div
+              key={key}
+              css={{
+                border: "1px solid #d9d9d9",
+                padding: "4px",
+                marginBottom: "8px",
+                position: "relative",
+              }}
+            >
+              <div
+                css={{ padding: "0 4px", fontWeight: 500, fontSize: "12px" }}
+              >
+                {comment.userName}
+              </div>
+              <div
+                css={{
+                  fontSize: "10px",
+                  position: "absolute",
+                  right: "2px",
+                  top: "0px",
+                }}
+              >{`${comment.dateTime[3]}:${comment.dateTime[4]} ${comment.dateTime[2]}.${comment.dateTime[1]}.${comment.dateTime[0]}`}</div>
+              <div css={{ padding: "0 4px", fontSize: "12px" }}>
+                {comment.message}
+              </div>
+            </div>
+          ))
         )}
       </div>
     </Modal>

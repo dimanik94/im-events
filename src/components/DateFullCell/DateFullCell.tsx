@@ -9,6 +9,8 @@ import { IDateFullCellProps } from "./DateFullCell.types";
 import mainLogo from "../../styles/msh.jpg";
 import { isEmpty, isNumber, isUndefined } from "lodash";
 import CalendarEventModal from "../modals/CalendarEventModal/CalendarEventModal";
+import { baseUrl } from "../../utils/const";
+import { fetchData, postData } from "../../utils/fetch/api";
 
 const DateFullCell: FC<IDateFullCellProps> = (props) => {
   const { date, isDisabled, calendarEvent } = props;
@@ -27,9 +29,33 @@ const DateFullCell: FC<IDateFullCellProps> = (props) => {
     setIsModalVisible(false);
   }, []);
 
-  const onFinish = useCallback((values: any) => {
-    console.log("Success:", values);
-  }, []);
+  const onFinish = useCallback(
+    (values: {
+      eventName: string;
+      description: string;
+      minMembers: number;
+    }) => {
+      console.log("Success:", values);
+      // setIsLoading(true);
+
+      postData(`${baseUrl}calendar-events`, {
+        name: values.eventName,
+        description: values.description ?? "",
+        date: date.format("YYYY-MM-DD"),
+        minNumber: values.minMembers ?? 0,
+      })
+        .then(() => {
+          fetchData(`${baseUrl}events/all`).then((res) => {
+            // setEvents(res);
+            handleCancel();
+          });
+        })
+        .finally(() => {
+          // setIsLoading(false);
+        });
+    },
+    [date, handleCancel]
+  );
 
   const onFinishFailed = useCallback((errorInfo: any) => {
     console.log("Failed:", errorInfo);
@@ -76,10 +102,12 @@ const DateFullCell: FC<IDateFullCellProps> = (props) => {
           </Form.Item>
 
           <Form.Item name="minMembers" rules={[{ type: "number" }]}>
-            <InputNumber placeholder="123" min={1} max={1000} />
-            <span className="ant-form-text">
-              Минимальное количество участников
-            </span>
+            <InputNumber
+              placeholder="Минимальное количество участников"
+              min={1}
+              max={1000}
+              css={{ width: "100%" }}
+            />
           </Form.Item>
 
           <Form.Item wrapperCol={{ span: 24 }}>
