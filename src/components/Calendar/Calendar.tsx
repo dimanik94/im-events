@@ -5,7 +5,7 @@ import { CalendarProps } from "antd/lib/calendar/generateCalendar";
 import { Moment } from "moment";
 import DateFullCell from "../DateFullCell/DateFullCell";
 import moment from "moment";
-import { forEach, size } from "lodash";
+import { forEach } from "lodash";
 import { baseUrl } from "../../utils/const";
 // import locale from "../../locale";
 

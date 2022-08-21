@@ -7,15 +7,14 @@ import { useDrop } from "react-dnd";
 import { buttonStyle } from "../../styles/style";
 import { IDateFullCellProps } from "./DateFullCell.types";
 import mainLogo from "../../styles/msh.jpg";
-import { find, forEach, isEmpty, isNumber, isUndefined } from "lodash";
+import { find, forEach, isNumber, isUndefined } from "lodash";
 import CalendarEventModal from "../modals/CalendarEventModal/CalendarEventModal";
 import { baseUrl } from "../../utils/const";
 import { fetchData, postData } from "../../utils/fetch/api";
 import { TCalendarEvent } from "../Calendar/Calendar";
 
 const DateFullCell: FC<IDateFullCellProps> = (props) => {
-  const { date, isDisabled, calendarEvent, setCalendarEvents, isAuthorized } =
-    props;
+  const { date, calendarEvent, setCalendarEvents, isAuthorized } = props;
 
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isInfoModalVisible, setIsInfoModalVisible] = useState(false);
