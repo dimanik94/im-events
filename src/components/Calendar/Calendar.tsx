@@ -97,7 +97,7 @@ const Calendar: FC = () => {
             color: "#0cb3b3 !important",
             borderColor: "#0cb3b3 !important",
           },
-        ".ant-radio-button-wrapper-checked:not(.ant-radio-button-wrapper-disabled):first-child":
+        ".ant-radio-button-wrapper-checked:not(.ant-radio-button-wrapper-disabled):first-of-type":
           {
             borderColor: "#0cb3b3 !important",
           },
