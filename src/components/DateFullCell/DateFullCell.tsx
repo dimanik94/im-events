@@ -8,21 +8,19 @@ import { buttonStyle } from "../../styles/style";
 import { IDateFullCellProps } from "./DateFullCell.types";
 import mainLogo from "../../styles/msh.jpg";
 import { isNumber } from "lodash";
+import CalendarEventModal from "../modals/CalendarEventModal/CalendarEventModal";
 
 const DateFullCell: FC<IDateFullCellProps> = (props) => {
   const { date, isDisabled, calendarEvent } = props;
 
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [isInfoModalVisible, setIsInfoModalVisible] = useState(false);
   const [isFooterVisible, setIsFooterVisible] = useState(false);
   const [isLiked, setIsLiked] = useState(false);
   const event = useRef<{ name: string; type: string }>();
 
   const showModal = useCallback(() => {
     setIsModalVisible(true);
-  }, []);
-
-  const handleOk = useCallback(() => {
-    setIsModalVisible(false);
   }, []);
 
   const handleCancel = useCallback(() => {
@@ -37,12 +35,19 @@ const DateFullCell: FC<IDateFullCellProps> = (props) => {
     console.log("Failed:", errorInfo);
   }, []);
 
+  const showInfoModal = useCallback(() => {
+    setIsInfoModalVisible(true);
+  }, []);
+
+  const handleInfoCancel = useCallback(() => {
+    setIsInfoModalVisible(false);
+  }, []);
+
   const renderModal = useCallback(() => {
     return (
       <Modal
         title="Новое мероприятие"
         visible={isModalVisible}
-        onOk={handleOk}
         onCancel={handleCancel}
         centered={true}
         width={440}
@@ -97,7 +102,7 @@ const DateFullCell: FC<IDateFullCellProps> = (props) => {
         </Form>
       </Modal>
     );
-  }, [handleCancel, handleOk, isModalVisible, onFinish, onFinishFailed]);
+  }, [handleCancel, isModalVisible, onFinish, onFinishFailed]);
 
   const [{ isOver }, dropRef] = useDrop(
     () => ({
@@ -132,6 +137,7 @@ const DateFullCell: FC<IDateFullCellProps> = (props) => {
       <div
         ref={dropRef}
         className={resultClassName}
+        onClick={showInfoModal}
         css={{
           position: "relative",
           backgroundColor: isOver ? "#f5f5f5" : undefined,
@@ -228,6 +234,15 @@ const DateFullCell: FC<IDateFullCellProps> = (props) => {
         </div>
       )}
       {renderModal()}
+      {calendarEvent && calendarEvent.id && (
+        <CalendarEventModal
+          eventId={
+            isInfoModalVisible ? calendarEvent?.id.toString() : undefined
+          }
+          handleCancel={handleInfoCancel}
+          isModalVisible={isInfoModalVisible}
+        />
+      )}
     </>
   );
 };

@@ -1,15 +1,14 @@
 /** @jsxImportSource @emotion/react */
 import { Button, Form, Input, Modal } from "antd";
 import { FC, useCallback, useState } from "react";
-import { buttonStyle as globalButtonStyle } from "../../styles/style";
-import { baseUrl } from "../../utils/const";
-import { fetchData } from "../../utils/fetch/fetchData";
+import { baseUrl } from "../../../utils/const";
+import { fetchData } from "../../../utils/fetch/api";
 import { buttonStyle, errorIconStyle, errorStyle } from "./AuthModal.style";
 import type { IAuthModalProps } from "./AuthModal.types";
+import { buttonStyle as globalButtonStyle } from "../../../styles/style";
 
 const AuthModal: FC<IAuthModalProps> = ({
   handleCancel,
-  handleOk,
   isModalVisible,
   setIsAuthorized,
 }) => {
@@ -61,7 +60,6 @@ const AuthModal: FC<IAuthModalProps> = ({
     <Modal
       title="Авторизация"
       visible={isModalVisible}
-      onOk={handleOk}
       onCancel={onCancel}
       centered={true}
       width={440}
