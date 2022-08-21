@@ -10,13 +10,15 @@ const Main: FC<{ isAuthorized: boolean }> = (props) => {
 
   return (
     <>
-      <Sider
-        width={256}
-        theme="light"
-        css={{ borderRight: "1px solid #f0f0f0" }}
-      >
-        <Events />
-      </Sider>
+      {isAuthorized && (
+        <Sider
+          width={256}
+          theme="light"
+          css={{ borderRight: "1px solid #f0f0f0" }}
+        >
+          <Events />
+        </Sider>
+      )}
       <Content css={{ overflowY: "auto", position: "relative" }}>
         <Calendar isAuthorized={isAuthorized} />
       </Content>
