@@ -10,7 +10,7 @@ export const wrapperStyle = {
 export const buttonWrapperStyle = { height: "48px", display: "flex" };
 
 export const avatarStyle = {
-  fontSize: "12px",
+  fontSize: "12px !important",
   color: "#fff",
   backgroundColor: "#FA8C16",
   alignSelf: "center",
