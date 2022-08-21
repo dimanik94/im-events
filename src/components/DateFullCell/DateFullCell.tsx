@@ -131,15 +131,28 @@ const DateFullCell: FC<IDateFullCellProps> = (props) => {
   }
 
   const percent = useMemo(() => {
+    const minNumber = calendarEvent?.minNumber;
+    const employeesLength = calendarEvent?.employees.length;
+
     if (
-      isNumber(calendarEvent?.minNumber) &&
-      calendarEvent?.employees.length === calendarEvent?.minNumber
+      (minNumber === 0 && employeesLength === 0) ||
+      (minNumber === 1 && employeesLength === 0)
     ) {
+      return 0;
+    }
+
+    if (minNumber === 0 && employeesLength === 1) {
       return 100;
     }
 
-    return 20;
+    if (isNumber(minNumber) && isNumber(employeesLength)) {
+      return (employeesLength / minNumber) * 100;
+    }
   }, [calendarEvent?.minNumber, calendarEvent?.employees]);
+
+  const isShowProgressBar = useMemo(() => {
+    return Boolean(calendarEvent?.name);
+  }, [calendarEvent?.name]);
 
   return (
     <>
@@ -161,7 +174,7 @@ const DateFullCell: FC<IDateFullCellProps> = (props) => {
           }}
         >
           <div>{date.date()}</div>
-          {calendarEvent?.name && (
+          {isShowProgressBar && (
             <Progress
               percent={percent}
               size="small"
