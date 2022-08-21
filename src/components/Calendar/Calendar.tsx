@@ -5,9 +5,18 @@ import { CalendarProps } from "antd/lib/calendar/generateCalendar";
 import { Moment } from "moment";
 import DateFullCell from "../DateFullCell/DateFullCell";
 import moment from "moment";
-import { forEach } from "lodash";
+import { forEach, size } from "lodash";
 import { baseUrl } from "../../utils/const";
 // import locale from "../../locale";
+
+export type TEmployee = {
+  id: number;
+  birthday: [number, number, number] | null;
+  login: string;
+  password: string;
+  surName: string;
+  userName: string;
+};
 
 export type TCalendarEvent = {
   id: number;
@@ -15,6 +24,7 @@ export type TCalendarEvent = {
   description: string;
   minNumber: 5;
   date: [number, number, number];
+  employees: TEmployee[];
 };
 
 const isDateDisabled = (currentDate: Moment) => {
@@ -37,6 +47,8 @@ const Calendar: FC = () => {
   const [calendarEvents, setCalendarEvents] =
     useState<Record<string, TCalendarEvent>>();
 
+  // const [employees, setEmployees] = useState<any[]>([]);
+
   useEffect(() => {
     async function fetchData() {
       fetch(`${baseUrl}/calendar-events/all`).then((body) => {
@@ -57,6 +69,35 @@ const Calendar: FC = () => {
 
     fetchData();
   }, []);
+
+  // useEffect(() => {
+  //   forEach(calendarEvents, (calendarEvent, index) => {
+  //     const calendarEventId = calendarEvent.id;
+  //     console.log("index", index);
+  //     console.log("size(calendarEvents)", size(calendarEvents));
+  //     console.log("---");
+  //     async function fetchData() {
+  //       const response = await fetch(
+  //         `http://192.168.89.79:8080/employees/calendar-event/${calendarEventId}`
+  //       );
+
+  //       response.json().then((res) => {
+  //         // console.log("calendarEventId", calendarEventId);
+  //         // console.log("res", res);
+  //         // console.log("---");
+  //         setEmployees((prev) => [
+  //           ...prev,
+  //           {
+  //             calendarEventId,
+  //             employees: res,
+  //           },
+  //         ]);
+  //       });
+  //     }
+
+  //     fetchData();
+  //   });
+  // }, [calendarEvents]);
 
   // const headerRender = useCallback<
   //   NonNullable<CalendarProps<Moment>["headerRender"]>
@@ -109,7 +150,8 @@ const Calendar: FC = () => {
 
   // console.log("locale", locale);
 
-  console.log("calendarEvents", calendarEvents);
+  // console.log("calendarEvents", calendarEvents);
+
   if (!calendarEvents) {
     return (
       <Spin

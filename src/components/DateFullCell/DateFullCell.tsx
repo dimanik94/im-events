@@ -2,12 +2,12 @@
 import { Button, Form, Input, InputNumber, Modal, Progress } from "antd";
 import { LikeOutlined, DislikeOutlined } from "@ant-design/icons";
 import moment from "moment";
-import { FC, useCallback, useRef, useState } from "react";
+import { FC, useCallback, useMemo, useRef, useState } from "react";
 import { useDrop } from "react-dnd";
 import { buttonStyle } from "../../styles/style";
 import { IDateFullCellProps } from "./DateFullCell.types";
 import mainLogo from "../../styles/msh.jpg";
-import { isNumber } from "lodash";
+import { isEmpty, isNumber, isUndefined } from "lodash";
 import CalendarEventModal from "../modals/CalendarEventModal/CalendarEventModal";
 import { baseUrl } from "../../utils/const";
 import { fetchData, postData } from "../../utils/fetch/api";
@@ -158,7 +158,16 @@ const DateFullCell: FC<IDateFullCellProps> = (props) => {
     resultClassName = "ant-picker-cell-inner ant-picker-calendar-date";
   }
 
-  let percent: false | number = 10;
+  const percent = useMemo(() => {
+    if (
+      isNumber(calendarEvent?.minNumber) &&
+      calendarEvent?.employees.length === calendarEvent?.minNumber
+    ) {
+      return 100;
+    }
+
+    return 20;
+  }, [calendarEvent?.minNumber, calendarEvent?.employees]);
 
   return (
     <>
@@ -180,19 +189,20 @@ const DateFullCell: FC<IDateFullCellProps> = (props) => {
           }}
         >
           <div>{date.date()}</div>
-          {isNumber(percent) && !isDisabled && (
+          {calendarEvent?.name && (
             <Progress
               percent={percent}
               size="small"
-              steps={10}
+              // steps={10}
               showInfo={false}
-              strokeColor={percent === 100 ? "#4CAF50" : "#D93A36"}
+              css={{ maxWidth: "50px" }}
+              strokeColor={percent === 100 ? "#4CAF50" : "#FFDF00"}
             />
           )}
         </div>
         <div
           className="ant-picker-calendar-date-content"
-          css={{ textAlign: "center !important" as any, display: "flex" }}
+          css={{ display: "flex", flexDirection: "column" }}
           onMouseEnter={() => {
             setIsFooterVisible(true);
           }}
@@ -200,7 +210,7 @@ const DateFullCell: FC<IDateFullCellProps> = (props) => {
             setIsFooterVisible(false);
           }}
         >
-          {date.date() === 22 && date.month() === 7 && (
+          {/* {date.date() === 22 && date.month() === 7 && (
             <div
               css={{
                 overflow: "hidden",
@@ -210,7 +220,25 @@ const DateFullCell: FC<IDateFullCellProps> = (props) => {
             >
               Футбол
             </div>
-          )}
+          )} */}
+          <div
+            css={{
+              overflow: "hidden",
+              textOverflow: "ellipsis",
+              whiteSpace: "nowrap",
+            }}
+          >
+            {calendarEvent?.name}
+          </div>
+          <div
+            css={{
+              overflow: "hidden",
+              textOverflow: "ellipsis",
+              whiteSpace: "nowrap",
+            }}
+          >
+            {calendarEvent?.description}
+          </div>
           {date.date() === 3 && date.month() === 8 && (
             <img src={mainLogo} width="50px" height="50px" alt="msh" />
           )}
