@@ -7,13 +7,14 @@ import { useDrop } from "react-dnd";
 import { buttonStyle } from "../../styles/style";
 import { IDateFullCellProps } from "./DateFullCell.types";
 import mainLogo from "../../styles/msh.jpg";
-import { isEmpty, isNumber, isUndefined } from "lodash";
+import { forEach, isEmpty, isNumber, isUndefined } from "lodash";
 import CalendarEventModal from "../modals/CalendarEventModal/CalendarEventModal";
 import { baseUrl } from "../../utils/const";
 import { fetchData, postData } from "../../utils/fetch/api";
+import { TCalendarEvent } from "../Calendar/Calendar";
 
 const DateFullCell: FC<IDateFullCellProps> = (props) => {
-  const { date, isDisabled, calendarEvent } = props;
+  const { date, isDisabled, calendarEvent, setCalendarEvents } = props;
 
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isInfoModalVisible, setIsInfoModalVisible] = useState(false);
@@ -50,11 +51,27 @@ const DateFullCell: FC<IDateFullCellProps> = (props) => {
             handleCancel();
           });
         })
+        .then(() => {
+          fetch(`${baseUrl}/calendar-events/all`).then((body) => {
+            body.json().then((res: TCalendarEvent[]) => {
+              console.log("res", res);
+              const preparedRes: Record<string, any> = {};
+
+              forEach(res, (calendar) => {
+                const preparedKey = `${calendar.date.join(".")}`;
+
+                preparedRes[preparedKey] = calendar;
+              });
+
+              setCalendarEvents(preparedRes);
+            });
+          });
+        })
         .finally(() => {
           // setIsLoading(false);
         });
     },
-    [date, handleCancel]
+    [date, handleCancel, setCalendarEvents]
   );
 
   const onFinishFailed = useCallback((errorInfo: any) => {
