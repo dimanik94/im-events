@@ -212,7 +212,7 @@ const Events: FC = () => {
 
               return (
                 <div
-                  key={index}
+                  key={type}
                   css={{
                     width: 36,
                     height: 36,
@@ -238,7 +238,7 @@ const Events: FC = () => {
         </div>
         <div css={{ padding: "4px 8px" }}>
           {map(
-            filter(events, (filteredEvent) => {
+            filter(events1, (filteredEvent) => {
               if (isUndefined(currentType)) {
                 return true;
               }

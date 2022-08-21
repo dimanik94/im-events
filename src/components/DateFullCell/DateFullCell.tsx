@@ -1,16 +1,20 @@
 /** @jsxImportSource @emotion/react */
-import { Button, Form, Input, InputNumber, Modal } from "antd";
+import { Button, Form, Input, InputNumber, Modal, Progress } from "antd";
+import { LikeOutlined, DislikeOutlined } from "@ant-design/icons";
 import moment from "moment";
 import { FC, useCallback, useRef, useState } from "react";
 import { useDrop } from "react-dnd";
 import { buttonStyle } from "../../styles/style";
 import { IDateFullCellProps } from "./DateFullCell.types";
 import mainLogo from "../../styles/msh.jpg";
+import { isNumber } from "lodash";
 
 const DateFullCell: FC<IDateFullCellProps> = (props) => {
-  const { date } = props;
+  const { date, isDisabled, calendarEvent } = props;
 
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [isFooterVisible, setIsFooterVisible] = useState(false);
+  const [isLiked, setIsLiked] = useState(false);
   const event = useRef<{ name: string; type: string }>();
 
   const showModal = useCallback(() => {
@@ -121,23 +125,108 @@ const DateFullCell: FC<IDateFullCellProps> = (props) => {
     resultClassName = "ant-picker-cell-inner ant-picker-calendar-date";
   }
 
+  let percent: false | number = 10;
+
   return (
     <>
       <div
         ref={dropRef}
         className={resultClassName}
-        css={{ backgroundColor: isOver ? "#f5f5f5" : undefined }}
+        css={{
+          position: "relative",
+          backgroundColor: isOver ? "#f5f5f5" : undefined,
+        }}
       >
-        <div className="ant-picker-calendar-date-value">{date.date()}</div>
+        <div
+          className="ant-picker-calendar-date-value"
+          css={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+          }}
+        >
+          <div>{date.date()}</div>
+          {isNumber(percent) && !isDisabled && (
+            <Progress
+              percent={percent}
+              size="small"
+              steps={10}
+              showInfo={false}
+              strokeColor={percent === 100 ? "#4CAF50" : "#D93A36"}
+            />
+          )}
+        </div>
         <div
           className="ant-picker-calendar-date-content"
-          css={{ textAlign: "center !important" as any }}
+          css={{ textAlign: "center !important" as any, display: "flex" }}
+          onMouseEnter={() => {
+            setIsFooterVisible(true);
+          }}
+          onMouseLeave={() => {
+            setIsFooterVisible(false);
+          }}
         >
+          {date.date() === 22 && date.month() === 7 && (
+            <div
+              css={{
+                overflow: "hidden",
+                textOverflow: "ellipsis",
+                whiteSpace: "nowrap",
+              }}
+            >
+              Футбол
+            </div>
+          )}
           {date.date() === 3 && date.month() === 8 && (
             <img src={mainLogo} width="50px" height="50px" alt="msh" />
           )}
         </div>
       </div>
+      <div
+        css={{
+          position: "absolute",
+          width: "calc(100% - 8px)",
+          height: isFooterVisible ? 36 : 0,
+          // height: 36,
+          backgroundColor: "#f0f0f0",
+          bottom: 0,
+          left: 4,
+          zIndex: 10000,
+          // transition: "height 300ms",
+          opacity: isFooterVisible ? 1 : 0,
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          ".ant-btn-ghost:hover": {
+            color: isLiked ? "#D93A36" : "#0cb3b3",
+            borderColor: isLiked ? "#D93A36" : "#0cb3b3",
+          },
+        }}
+        onMouseEnter={() => {
+          setIsFooterVisible(true);
+        }}
+        onMouseLeave={(e) => {
+          setIsFooterVisible(false);
+        }}
+      >
+        {isFooterVisible && (
+          <Button
+            type="ghost"
+            icon={isLiked ? <DislikeOutlined /> : <LikeOutlined />}
+            size="small"
+            onClick={() => {
+              setIsLiked((prev) => !prev);
+            }}
+          />
+        )}
+      </div>
+      {isLiked && (
+        <div
+          css={{ position: "absolute", bottom: 0, left: 4, color: "#4CAF50" }}
+        >
+          <LikeOutlined css={{ fontSize: 12 }} />
+        </div>
+      )}
       {renderModal()}
     </>
   );

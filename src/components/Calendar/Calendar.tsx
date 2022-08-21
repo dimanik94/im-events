@@ -1,14 +1,63 @@
 /** @jsxImportSource @emotion/react */
-import { FC, useCallback } from "react";
-import { Calendar as AntCalendar } from "antd";
+import { FC, useCallback, useEffect, useState } from "react";
+import { Calendar as AntCalendar, Spin } from "antd";
 import { CalendarProps } from "antd/lib/calendar/generateCalendar";
 import { Moment } from "moment";
 import DateFullCell from "../DateFullCell/DateFullCell";
 import moment from "moment";
+import { forEach } from "lodash";
 import CalendarEventModal from "../modals/CalendarEventModal/CalendarEventModal";
 // import locale from "../../locale";
 
+export type TCalendarEvent = {
+  id: number;
+  name: string;
+  description: string;
+  minNumber: 5;
+  date: [number, number, number];
+};
+
+const isDateDisabled = (currentDate: Moment) => {
+  if (currentDate.date() === 3 && currentDate.month() === 8) {
+    return true;
+  }
+
+  const currentDateMoment = moment()
+    .set("date", currentDate.date())
+    .set("month", currentDate.month());
+
+  const nowDateMoment = moment()
+    .set("date", moment(moment.now()).date())
+    .set("month", moment(moment.now()).month());
+
+  return currentDateMoment < nowDateMoment;
+};
+
 const Calendar: FC = () => {
+  const [calendarEvents, setCalendarEvents] =
+    useState<Record<string, TCalendarEvent>>();
+
+  useEffect(() => {
+    async function fetchData() {
+      fetch("http://192.168.89.177:8080/calendar-events/all").then((body) => {
+        body.json().then((res: TCalendarEvent[]) => {
+          console.log("res", res);
+          const preparedRes: Record<string, any> = {};
+
+          forEach(res, (calendar) => {
+            const preparedKey = `${calendar.date.join(".")}`;
+
+            preparedRes[preparedKey] = calendar;
+          });
+
+          setCalendarEvents(preparedRes);
+        });
+      });
+    }
+
+    fetchData();
+  }, []);
+
   // const headerRender = useCallback<
   //   NonNullable<CalendarProps<Moment>["headerRender"]>
   // >((config) => {
@@ -18,11 +67,24 @@ const Calendar: FC = () => {
 
   const dateFullCellRender = useCallback<
     NonNullable<CalendarProps<Moment>["dateFullCellRender"]>
-  >((date) => {
-    // console.log("dateFullCellRender date", date);
+  >(
+    (date) => {
+      const calendarEventKey = [
+        date.year(),
+        date.month() + 1,
+        date.date(),
+      ].join(".");
 
-    return <DateFullCell date={date} />;
-  }, []);
+      return (
+        <DateFullCell
+          date={date}
+          isDisabled={isDateDisabled(date)}
+          calendarEvent={calendarEvents?.[calendarEventKey]}
+        />
+      );
+    },
+    [calendarEvents]
+  );
 
   // const monthFullCellRender = useCallback<
   //   NonNullable<CalendarProps<Moment>["monthFullCellRender"]>
@@ -47,73 +109,72 @@ const Calendar: FC = () => {
 
   // console.log("locale", locale);
 
-  return (
-    <>
-      <AntCalendar
-        // headerRender={headerRender}
-        dateFullCellRender={dateFullCellRender}
-        // monthFullCellRender={monthFullCellRender}
-        // dateCellRender={dateCellRender}
-        // monthCellRender={monthCellRender}
-        // locale={locale}
-        disabledDate={(date) => {
-          if (date.date() === 3 && date.month() === 8) {
-            return true;
-          }
-
-          const asd = moment()
-            .set("date", date.date())
-            .set("month", date.month());
-
-          const asd1 = moment()
-            .set("date", moment(moment.now()).date())
-            .set("month", moment(moment.now()).month());
-
-          return asd < asd1;
-          // return date < moment(moment.now());
-        }}
+  console.log("calendarEvents", calendarEvents);
+  if (!calendarEvents) {
+    return (
+      <Spin
         css={{
-          padding: "8px 16px",
-          ".ant-picker-calendar-date-today": {
-            borderColor: "#0cb3b3 !important",
-            // backgroundColor: "#e1faf6 !important",
-          },
-          ".ant-picker-cell-selected .ant-picker-calendar-date-value": {
-            color: "#0cb3b3 !important",
-          },
-          // ".ant-picker-content": {
-          //   height: "calc(100vh - 120px)",
-          // },
-          ".ant-picker-cell-selected .ant-picker-calendar-date": {
+          position: "absolute",
+          top: "50%",
+          left: "50%",
+          transform: "translate(-50%, -50%)",
+        }}
+      />
+    );
+  }
+
+  return (
+    <AntCalendar
+      // headerRender={headerRender}
+      dateFullCellRender={dateFullCellRender}
+      // monthFullCellRender={monthFullCellRender}
+      // dateCellRender={dateCellRender}
+      // monthCellRender={monthCellRender}
+      // locale={locale}
+      disabledDate={(date) => isDateDisabled(date)}
+      css={{
+        padding: "8px 16px",
+        ".ant-picker-calendar-date-today": {
+          borderColor: "#0cb3b3 !important",
+          // backgroundColor: "#e1faf6 !important",
+        },
+        ".ant-picker-cell-selected .ant-picker-calendar-date-value": {
+          color: "#0cb3b3 !important",
+        },
+        // ".ant-picker-content": {
+        //   height: "calc(100vh - 120px)",
+        // },
+        ".ant-picker-cell-selected .ant-picker-calendar-date": {
+          // backgroundColor: "#e1faf6 !important",
+          backgroundColor: "transparent !important",
+        },
+        ".ant-select:not(.ant-select-disabled):hover .ant-select-selector": {
+          borderColor: "#0cb3b3 !important",
+        },
+        ".ant-select-item-option-selected:not(.ant-select-item-option-disabled)":
+          {
             backgroundColor: "#e1faf6 !important",
           },
-          ".ant-select:not(.ant-select-disabled):hover .ant-select-selector": {
+        ".ant-radio-button-wrapper-checked:not(.ant-radio-button-wrapper-disabled)":
+          {
+            color: "#0cb3b3 !important",
             borderColor: "#0cb3b3 !important",
           },
-          ".ant-select-item-option-selected:not(.ant-select-item-option-disabled)":
-            {
-              backgroundColor: "#e1faf6 !important",
-            },
-          ".ant-radio-button-wrapper-checked:not(.ant-radio-button-wrapper-disabled)":
-            {
-              color: "#0cb3b3 !important",
-              borderColor: "#0cb3b3 !important",
-            },
-          ".ant-radio-button-wrapper-checked:not(.ant-radio-button-wrapper-disabled):first-of-type":
-            {
-              borderColor: "#0cb3b3 !important",
-            },
-          ".ant-radio-button-wrapper:hover": {
-            color: "#0cb3b3 !important",
+        ".ant-radio-button-wrapper-checked:not(.ant-radio-button-wrapper-disabled):first-child":
+          {
+            borderColor: "#0cb3b3 !important",
           },
-        }}
-      />
-      <CalendarEventModal
-        eventId="1"
-        handleCancel={() => {}}
-        isModalVisible={true}
-      />
-    </>
+        ".ant-radio-button-wrapper:hover": {
+          color: "#0cb3b3 !important",
+        },
+        "td.ant-picker-cell-disabled .ant-picker-calendar-date": {
+          background: "#fafafa",
+        },
+        td: {
+          position: "relative",
+        },
+      }}
+    />
   );
 };
 
