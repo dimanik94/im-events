@@ -91,8 +91,8 @@ export const iconsByType = {
         fill="currentColor"
       />
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M2 4C2 2.89543 2.89543 2 4 2H20C21.1046 2 22 2.89543 22 4V20C22 21.1046 21.1046 22 20 22H4C2.89543 22 2 21.1046 2 20V4ZM4 3.7H20C20.1657 3.7 20.3 3.83432 20.3 4V20C20.3 20.1657 20.1657 20.3 20 20.3H4C3.83431 20.3 3.7 20.1657 3.7 20V4C3.7 3.83431 3.83432 3.7 4 3.7Z"
         fill="currentColor"
       />
@@ -172,6 +172,7 @@ const Events: FC = () => {
 
             return (
               <div
+                key={type}
                 css={{
                   width: 36,
                   height: 36,
