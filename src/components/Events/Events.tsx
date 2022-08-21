@@ -6,6 +6,7 @@ import { Button } from "antd";
 import { buttonStyle as globalButtonStyle } from "../../styles/style";
 import { buttonStyle } from "./Events.styles";
 import AddEventLeftPanelModal from "../modals/AddEventLeftPanelModal/AddEventLeftPanelModal";
+import { baseUrl } from "../../utils/const";
 // import { Spin } from "antd";
 
 export type TEvent = {
@@ -164,7 +165,7 @@ const Events: FC = () => {
 
   useEffect(() => {
     async function fetchData() {
-      fetch("http://192.168.89.177:8080/events/all").then((body) => {
+      fetch(`${baseUrl}events/all`).then((body) => {
         body.json().then((res) => {
           setEvents(res);
         });
@@ -211,6 +212,7 @@ const Events: FC = () => {
 
               return (
                 <div
+                  key={index}
                   css={{
                     width: 36,
                     height: 36,

@@ -7,6 +7,7 @@ export const fetchData = (url: string): Promise<any> =>
     method: "GET",
   })
     .then((res) => {
+      console.log("res", res);
       return res.json();
     })
     .then((res) => res);
