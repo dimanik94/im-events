@@ -1,6 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import { FC, useCallback, useEffect, useState } from "react";
-import { Calendar as AntCalendar, Spin } from "antd";
+import { Calendar as AntCalendar, Checkbox, Spin } from "antd";
 import { CalendarProps } from "antd/lib/calendar/generateCalendar";
 import { Moment } from "moment";
 import DateFullCell from "../DateFullCell/DateFullCell";
@@ -48,6 +48,7 @@ const Calendar: FC<{ isAuthorized: boolean }> = (props) => {
 
   const [calendarEvents, setCalendarEvents] =
     useState<Record<string, TCalendarEvent>>();
+  const [showBirthdays, setShowBirthdays] = useState(false);
 
   // const [employees, setEmployees] = useState<any[]>([]);
 
@@ -124,10 +125,11 @@ const Calendar: FC<{ isAuthorized: boolean }> = (props) => {
           calendarEvent={calendarEvents?.[calendarEventKey]}
           setCalendarEvents={setCalendarEvents}
           isAuthorized={isAuthorized}
+          showBirthdays={showBirthdays}
         />
       );
     },
-    [calendarEvents, isAuthorized]
+    [calendarEvents, isAuthorized, showBirthdays]
   );
 
   // const monthFullCellRender = useCallback<
@@ -155,6 +157,10 @@ const Calendar: FC<{ isAuthorized: boolean }> = (props) => {
 
   // console.log("calendarEvents", calendarEvents);
 
+  const handleCheckboxChange = useCallback(() => {
+    setShowBirthdays(!showBirthdays);
+  }, [showBirthdays]);
+
   if (!calendarEvents) {
     return (
       <Spin
@@ -169,57 +175,68 @@ const Calendar: FC<{ isAuthorized: boolean }> = (props) => {
   }
 
   return (
-    <AntCalendar
-      // headerRender={headerRender}
-      dateFullCellRender={dateFullCellRender}
-      // monthFullCellRender={monthFullCellRender}
-      // dateCellRender={dateCellRender}
-      // monthCellRender={monthCellRender}
-      // locale={locale}
-      disabledDate={(date) => isDateDisabled(date)}
-      css={{
-        padding: "8px 16px",
-        ".ant-picker-calendar-date-today": {
-          borderColor: "#0cb3b3 !important",
-          // backgroundColor: "#e1faf6 !important",
-        },
-        ".ant-picker-cell-selected .ant-picker-calendar-date-value": {
-          color: "#0cb3b3 !important",
-        },
-        // ".ant-picker-content": {
-        //   height: "calc(100vh - 120px)",
-        // },
-        ".ant-picker-cell-selected .ant-picker-calendar-date": {
-          // backgroundColor: "#e1faf6 !important",
-          backgroundColor: "transparent !important",
-        },
-        ".ant-select:not(.ant-select-disabled):hover .ant-select-selector": {
-          borderColor: "#0cb3b3 !important",
-        },
-        ".ant-select-item-option-selected:not(.ant-select-item-option-disabled)":
-          {
-            backgroundColor: "#e1faf6 !important",
+    <>
+      {isAuthorized && (
+        <div css={{ position: "absolute", left: "24px", top: "24px" }}>
+          <Checkbox
+            css={{ marginRight: "8px" }}
+            onChange={handleCheckboxChange}
+          />
+          показать дни рождения
+        </div>
+      )}
+      <AntCalendar
+        // headerRender={headerRender}
+        dateFullCellRender={dateFullCellRender}
+        // monthFullCellRender={monthFullCellRender}
+        // dateCellRender={dateCellRender}
+        // monthCellRender={monthCellRender}
+        // locale={locale}
+        disabledDate={(date) => isDateDisabled(date)}
+        css={{
+          padding: "8px 16px",
+          ".ant-picker-calendar-date-today": {
+            borderColor: "#0cb3b3 !important",
+            // backgroundColor: "#e1faf6 !important",
           },
-        ".ant-radio-button-wrapper-checked:not(.ant-radio-button-wrapper-disabled)":
-          {
+          ".ant-picker-cell-selected .ant-picker-calendar-date-value": {
             color: "#0cb3b3 !important",
+          },
+          // ".ant-picker-content": {
+          //   height: "calc(100vh - 120px)",
+          // },
+          ".ant-picker-cell-selected .ant-picker-calendar-date": {
+            // backgroundColor: "#e1faf6 !important",
+            backgroundColor: "transparent !important",
+          },
+          ".ant-select:not(.ant-select-disabled):hover .ant-select-selector": {
             borderColor: "#0cb3b3 !important",
           },
-        ".ant-radio-button-wrapper-checked:not(.ant-radio-button-wrapper-disabled):first-of-type":
-          {
-            borderColor: "#0cb3b3 !important",
+          ".ant-select-item-option-selected:not(.ant-select-item-option-disabled)":
+            {
+              backgroundColor: "#e1faf6 !important",
+            },
+          ".ant-radio-button-wrapper-checked:not(.ant-radio-button-wrapper-disabled)":
+            {
+              color: "#0cb3b3 !important",
+              borderColor: "#0cb3b3 !important",
+            },
+          ".ant-radio-button-wrapper-checked:not(.ant-radio-button-wrapper-disabled):first-of-type":
+            {
+              borderColor: "#0cb3b3 !important",
+            },
+          ".ant-radio-button-wrapper:hover": {
+            color: "#0cb3b3 !important",
           },
-        ".ant-radio-button-wrapper:hover": {
-          color: "#0cb3b3 !important",
-        },
-        "td.ant-picker-cell-disabled .ant-picker-calendar-date": {
-          background: "#fafafa",
-        },
-        td: {
-          position: "relative",
-        },
-      }}
-    />
+          "td.ant-picker-cell-disabled .ant-picker-calendar-date": {
+            background: "#fafafa",
+          },
+          td: {
+            position: "relative",
+          },
+        }}
+      />
+    </>
   );
 };
 

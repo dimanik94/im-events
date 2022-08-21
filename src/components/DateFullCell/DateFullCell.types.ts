@@ -10,4 +10,5 @@ export interface IDateFullCellProps {
     SetStateAction<Record<string, TCalendarEvent> | undefined>
   >;
   isAuthorized: boolean;
+  showBirthdays: boolean;
 }
