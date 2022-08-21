@@ -401,7 +401,7 @@ const DateFullCell: FC<IDateFullCellProps> = (props) => {
           css={{
             position: "absolute",
             bottom: 0,
-            left: 4,
+            left: 8,
             color: "#4CAF50",
             zIndex: 99999,
           }}
