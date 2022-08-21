@@ -15,7 +15,7 @@ import { useDrop } from "react-dnd";
 import { buttonStyle } from "../../styles/style";
 import { IDateFullCellProps } from "./DateFullCell.types";
 import mainLogo from "../../styles/msh.jpg";
-import { filter, find, forEach, isNumber, isUndefined } from "lodash";
+import { find, forEach, isNumber, isUndefined } from "lodash";
 import CalendarEventModal from "../modals/CalendarEventModal/CalendarEventModal";
 import { baseUrl, birthdays } from "../../utils/const";
 import {
@@ -57,8 +57,10 @@ const DateFullCell: FC<IDateFullCellProps> = (props) => {
   }, [calendarEvent, isAuthorized]);
 
   const showModal = useCallback(() => {
-    setIsModalVisible(true);
-  }, []);
+    if (isAuthorized) {
+      setIsModalVisible(true);
+    }
+  }, [isAuthorized]);
 
   const handleCancel = useCallback(() => {
     setIsModalVisible(false);
@@ -102,8 +104,10 @@ const DateFullCell: FC<IDateFullCellProps> = (props) => {
   );
 
   const showInfoModal = useCallback(() => {
-    setIsInfoModalVisible(true);
-  }, []);
+    if (isAuthorized) {
+      setIsInfoModalVisible(true);
+    }
+  }, [isAuthorized]);
 
   const handleInfoCancel = useCallback(() => {
     setIsInfoModalVisible(false);
