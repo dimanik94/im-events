@@ -9,4 +9,5 @@ export interface IDateFullCellProps {
   setCalendarEvents: Dispatch<
     SetStateAction<Record<string, TCalendarEvent> | undefined>
   >;
+  isAuthorized: boolean;
 }
