@@ -26,13 +26,14 @@ const AddEventLeftPanelModal: FC<IAddEventLeftPanelModalProps> = ({
         .then(() => {
           fetchData(`${baseUrl}events/all`).then((res) => {
             setEvents(res);
+            handleCancel();
           });
         })
         .finally(() => {
           setIsLoading(false);
         });
     },
-    [setEvents]
+    [handleCancel, setEvents]
   );
 
   return (

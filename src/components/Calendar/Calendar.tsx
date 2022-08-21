@@ -6,7 +6,7 @@ import { Moment } from "moment";
 import DateFullCell from "../DateFullCell/DateFullCell";
 import moment from "moment";
 import { forEach } from "lodash";
-import CalendarEventModal from "../modals/CalendarEventModal/CalendarEventModal";
+import { baseUrl } from "../../utils/const";
 // import locale from "../../locale";
 
 export type TCalendarEvent = {
@@ -39,7 +39,7 @@ const Calendar: FC = () => {
 
   useEffect(() => {
     async function fetchData() {
-      fetch("http://192.168.89.177:8080/calendar-events/all").then((body) => {
+      fetch(`${baseUrl}/calendar-events/all`).then((body) => {
         body.json().then((res: TCalendarEvent[]) => {
           console.log("res", res);
           const preparedRes: Record<string, any> = {};
@@ -160,7 +160,7 @@ const Calendar: FC = () => {
             color: "#0cb3b3 !important",
             borderColor: "#0cb3b3 !important",
           },
-        ".ant-radio-button-wrapper-checked:not(.ant-radio-button-wrapper-disabled):first-child":
+        ".ant-radio-button-wrapper-checked:not(.ant-radio-button-wrapper-disabled):first-of-type":
           {
             borderColor: "#0cb3b3 !important",
           },

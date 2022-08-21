@@ -7,7 +7,6 @@ import { buttonStyle as globalButtonStyle } from "../../styles/style";
 import { buttonStyle } from "./Events.styles";
 import AddEventLeftPanelModal from "../modals/AddEventLeftPanelModal/AddEventLeftPanelModal";
 import { baseUrl } from "../../utils/const";
-// import { Spin } from "antd";
 
 export type TEvent = {
   name: string;
@@ -238,7 +237,7 @@ const Events: FC = () => {
         </div>
         <div css={{ padding: "4px 8px" }}>
           {map(
-            filter(events1, (filteredEvent) => {
+            filter(events, (filteredEvent) => {
               if (isUndefined(currentType)) {
                 return true;
               }
