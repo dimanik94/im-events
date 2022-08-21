@@ -1,4 +1,4 @@
-export const baseUrl = "http://192.168.89.177:8080/";
+export const baseUrl = "http://192.168.89.79:8080/";
 
 export const eventTypes = [
   { value: "INTELLECTUAL", label: "Интеллектуальное" },
