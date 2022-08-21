@@ -43,7 +43,9 @@ const isDateDisabled = (currentDate: Moment) => {
   return currentDateMoment < nowDateMoment;
 };
 
-const Calendar: FC = () => {
+const Calendar: FC<{ isAuthorized: boolean }> = (props) => {
+  const { isAuthorized } = props;
+
   const [calendarEvents, setCalendarEvents] =
     useState<Record<string, TCalendarEvent>>();
 
@@ -53,7 +55,6 @@ const Calendar: FC = () => {
     async function fetchData() {
       fetch(`${baseUrl}/calendar-events/all`).then((body) => {
         body.json().then((res: TCalendarEvent[]) => {
-          console.log("res", res);
           const preparedRes: Record<string, any> = {};
 
           forEach(res, (calendar) => {
@@ -122,10 +123,11 @@ const Calendar: FC = () => {
           isDisabled={isDateDisabled(date)}
           calendarEvent={calendarEvents?.[calendarEventKey]}
           setCalendarEvents={setCalendarEvents}
+          isAuthorized={isAuthorized}
         />
       );
     },
-    [calendarEvents]
+    [calendarEvents, isAuthorized]
   );
 
   // const monthFullCellRender = useCallback<

@@ -5,7 +5,9 @@ import Sider from "antd/lib/layout/Sider";
 import Calendar from "../Calendar/Calendar";
 import Events from "../Events/Events";
 
-const Main: FC = () => {
+const Main: FC<{ isAuthorized: boolean }> = (props) => {
+  const { isAuthorized } = props;
+
   return (
     <>
       <Sider
@@ -16,7 +18,7 @@ const Main: FC = () => {
         <Events />
       </Sider>
       <Content css={{ overflowY: "auto", position: "relative" }}>
-        <Calendar />
+        <Calendar isAuthorized={isAuthorized} />
       </Content>
     </>
   );

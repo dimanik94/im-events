@@ -26,6 +26,8 @@ const App: FC = () => {
     !!localStorage.getItem("id")
   );
 
+  console.log("isAuthorized", isAuthorized);
+
   return (
     <ConfigProvider locale={ruRu}>
       <Global styles={appStyle} />
@@ -33,7 +35,7 @@ const App: FC = () => {
         <Header isAuthorized={isAuthorized} setIsAuthorized={setIsAuthorized} />
         <Layout style={layoutMainStyle}>
           <DndProvider backend={HTML5Backend}>
-            <Main />
+            <Main isAuthorized={isAuthorized} />
           </DndProvider>
         </Layout>
       </Layout>

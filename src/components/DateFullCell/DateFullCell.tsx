@@ -2,25 +2,41 @@
 import { Button, Form, Input, InputNumber, Modal, Progress } from "antd";
 import { LikeOutlined, DislikeOutlined } from "@ant-design/icons";
 import moment from "moment";
-import { FC, useCallback, useMemo, useRef, useState } from "react";
+import { FC, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useDrop } from "react-dnd";
 import { buttonStyle } from "../../styles/style";
 import { IDateFullCellProps } from "./DateFullCell.types";
 import mainLogo from "../../styles/msh.jpg";
-import { forEach, isEmpty, isNumber, isUndefined } from "lodash";
+import { find, forEach, isEmpty, isNumber, isUndefined } from "lodash";
 import CalendarEventModal from "../modals/CalendarEventModal/CalendarEventModal";
 import { baseUrl } from "../../utils/const";
 import { fetchData, postData } from "../../utils/fetch/api";
 import { TCalendarEvent } from "../Calendar/Calendar";
 
 const DateFullCell: FC<IDateFullCellProps> = (props) => {
-  const { date, isDisabled, calendarEvent, setCalendarEvents } = props;
+  const { date, isDisabled, calendarEvent, setCalendarEvents, isAuthorized } =
+    props;
 
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isInfoModalVisible, setIsInfoModalVisible] = useState(false);
   const [isFooterVisible, setIsFooterVisible] = useState(false);
   const [isLiked, setIsLiked] = useState(false);
   const event = useRef<{ name: string; type: string }>();
+
+  useEffect(() => {
+    if (!isUndefined(calendarEvent)) {
+      const employee = find(
+        calendarEvent.employees,
+        (employee) => employee.id === Number(localStorage.getItem("id"))
+      );
+
+      if (isAuthorized && employee) {
+        setIsLiked(true);
+      } else {
+        setIsLiked(false);
+      }
+    }
+  }, [calendarEvent, isAuthorized]);
 
   const showModal = useCallback(() => {
     setIsModalVisible(true);
@@ -234,7 +250,9 @@ const DateFullCell: FC<IDateFullCellProps> = (props) => {
           className="ant-picker-calendar-date-content"
           css={{ display: "flex", flexDirection: "column" }}
           onMouseEnter={() => {
-            setIsFooterVisible(true);
+            if (isAuthorized) {
+              setIsFooterVisible(true);
+            }
           }}
           onMouseLeave={() => {
             setIsFooterVisible(false);
@@ -256,6 +274,7 @@ const DateFullCell: FC<IDateFullCellProps> = (props) => {
               overflow: "hidden",
               textOverflow: "ellipsis",
               whiteSpace: "nowrap",
+              fontSize: 12,
             }}
           >
             {calendarEvent?.name}
@@ -265,6 +284,7 @@ const DateFullCell: FC<IDateFullCellProps> = (props) => {
               overflow: "hidden",
               textOverflow: "ellipsis",
               whiteSpace: "nowrap",
+              fontSize: 12,
             }}
           >
             {calendarEvent?.description}
@@ -295,13 +315,15 @@ const DateFullCell: FC<IDateFullCellProps> = (props) => {
           },
         }}
         onMouseEnter={() => {
-          setIsFooterVisible(true);
+          if (isAuthorized) {
+            setIsFooterVisible(true);
+          }
         }}
         onMouseLeave={(e) => {
           setIsFooterVisible(false);
         }}
       >
-        {isFooterVisible && (
+        {isFooterVisible && isAuthorized && (
           <Button
             type="ghost"
             icon={isLiked ? <DislikeOutlined /> : <LikeOutlined />}
