@@ -10,7 +10,12 @@ import mainLogo from "../../styles/msh.jpg";
 import { find, forEach, isNumber, isUndefined } from "lodash";
 import CalendarEventModal from "../modals/CalendarEventModal/CalendarEventModal";
 import { baseUrl } from "../../utils/const";
-import { fetchData, postData } from "../../utils/fetch/api";
+import {
+  deleteData,
+  fetchData,
+  postData,
+  putData,
+} from "../../utils/fetch/api";
 import { TCalendarEvent } from "../Calendar/Calendar";
 
 const DateFullCell: FC<IDateFullCellProps> = (props) => {
@@ -234,7 +239,7 @@ const DateFullCell: FC<IDateFullCellProps> = (props) => {
           className="ant-picker-calendar-date-content"
           css={{ display: "flex", flexDirection: "column" }}
           onMouseEnter={() => {
-            if (isAuthorized) {
+            if (isAuthorized && calendarEvent) {
               setIsFooterVisible(true);
             }
           }}
@@ -299,7 +304,7 @@ const DateFullCell: FC<IDateFullCellProps> = (props) => {
           },
         }}
         onMouseEnter={() => {
-          if (isAuthorized) {
+          if (isAuthorized && calendarEvent) {
             setIsFooterVisible(true);
           }
         }}
@@ -307,13 +312,59 @@ const DateFullCell: FC<IDateFullCellProps> = (props) => {
           setIsFooterVisible(false);
         }}
       >
-        {isFooterVisible && isAuthorized && (
+        {isFooterVisible && isAuthorized && calendarEvent && (
           <Button
             type="ghost"
             icon={isLiked ? <DislikeOutlined /> : <LikeOutlined />}
             size="small"
             onClick={() => {
               setIsLiked((prev) => !prev);
+
+              if (isLiked) {
+                console.log("удаление");
+                deleteData(
+                  `${baseUrl}calendar-events/?ce_id=${
+                    calendarEvent?.id
+                  }&emp_id=${Number(localStorage.getItem("id"))}`
+                ).then(() => {
+                  fetch(`${baseUrl}/calendar-events/all`).then((body) => {
+                    body.json().then((res: TCalendarEvent[]) => {
+                      console.log("res", res);
+                      const preparedRes: Record<string, any> = {};
+
+                      forEach(res, (calendar) => {
+                        const preparedKey = `${calendar.date.join(".")}`;
+
+                        preparedRes[preparedKey] = calendar;
+                      });
+
+                      setCalendarEvents(preparedRes);
+                    });
+                  });
+                });
+              } else {
+                console.log("добавление");
+                putData(
+                  `${baseUrl}calendar-events/?ce_id=${
+                    calendarEvent?.id
+                  }&emp_id=${Number(localStorage.getItem("id"))}`
+                ).then(() => {
+                  fetch(`${baseUrl}/calendar-events/all`).then((body) => {
+                    body.json().then((res: TCalendarEvent[]) => {
+                      console.log("res", res);
+                      const preparedRes: Record<string, any> = {};
+
+                      forEach(res, (calendar) => {
+                        const preparedKey = `${calendar.date.join(".")}`;
+
+                        preparedRes[preparedKey] = calendar;
+                      });
+
+                      setCalendarEvents(preparedRes);
+                    });
+                  });
+                });
+              }
             }}
           />
         )}

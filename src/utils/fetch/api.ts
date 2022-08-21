@@ -44,3 +44,20 @@ export const putData = (url: string): Promise<any> =>
       return res.json();
     })
     .then((res) => res);
+
+/**
+ * @param url
+ * @returns JSON-объект
+ */
+export const deleteData = (url: string): Promise<any> =>
+  fetch(url, {
+    method: "DELETE",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    // body: JSON.stringify(body),
+  })
+    .then((res) => {
+      return res.json();
+    })
+    .then((res) => res);
