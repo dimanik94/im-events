@@ -196,9 +196,11 @@ const DateFullCell: FC<IDateFullCellProps> = (props) => {
     }
 
     if (isNumber(minNumber) && isNumber(employeesLength)) {
-      return (employeesLength / minNumber) * 100;
+      return (employeesLength / minNumber) * 100 > 100
+        ? 100
+        : (employeesLength / minNumber) * 100;
     }
-  }, [calendarEvent?.minNumber, calendarEvent?.employees]);
+  }, [calendarEvent?.minNumber, calendarEvent?.employees.length]);
 
   const isShowProgressBar = useMemo(() => {
     return Boolean(calendarEvent?.name);
@@ -377,7 +379,13 @@ const DateFullCell: FC<IDateFullCellProps> = (props) => {
       </div>
       {isLiked && (
         <div
-          css={{ position: "absolute", bottom: 0, left: 4, color: "#4CAF50" }}
+          css={{
+            position: "absolute",
+            bottom: 0,
+            left: 4,
+            color: "#4CAF50",
+            zIndex: 99999,
+          }}
         >
           <LikeOutlined css={{ fontSize: 12 }} />
         </div>
