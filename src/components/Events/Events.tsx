@@ -149,7 +149,7 @@ const events1: TEvent[] = [
   },
 ];
 
-const Events: FC = () => {
+const Events: FC<{ isAuthorized: boolean }> = ({ isAuthorized }) => {
   const [events, setEvents] = useState<TEvent[]>();
   const [currentType, setCurrentType] = useState<string>();
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -248,13 +248,15 @@ const Events: FC = () => {
               <Event key={event.name} event={event} />
             )
           )}
-          <Button
-            type="primary"
-            css={[globalButtonStyle, buttonStyle]}
-            onClick={showModal}
-          >
-            Предложить событие
-          </Button>
+          {isAuthorized && (
+            <Button
+              type="primary"
+              css={[globalButtonStyle, buttonStyle]}
+              onClick={showModal}
+            >
+              Предложить событие
+            </Button>
+          )}
         </div>
       </div>
       <AddEventLeftPanelModal
