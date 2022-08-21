@@ -7,11 +7,13 @@ import { buttonStyle } from "../../../styles/style";
 import { baseUrl } from "../../../utils/const";
 import { postData, putData } from "../../../utils/fetch/api";
 import type { ICalendarEventModalProps } from "./CalendarEventModal.types";
+import fullMainLogo from "../../../styles/ms.png";
 
 const CalendarEventModal: FC<ICalendarEventModalProps> = ({
   eventId,
   handleCancel,
   isModalVisible,
+  calendarEvent,
 }) => {
   const [data, setData] = useState<{
     date: Array<number>;
@@ -110,6 +112,11 @@ const CalendarEventModal: FC<ICalendarEventModalProps> = ({
       destroyOnClose={true}
       bodyStyle={{ padding: "8px 16px", maxHeight: "700px", overflow: "auto" }}
     >
+      {calendarEvent.date[2] === 3 && calendarEvent.date[1] === 9 && (
+        <div css={{ textAlign: "center" }}>
+          <img src={fullMainLogo} alt="ms" height={300} width="auto" />
+        </div>
+      )}
       <div css={{ fontSize: "16px", fontWeight: 600 }}>{data.name}</div>
       <div
         css={{ fontStyle: "italic", marginBottom: "12px", color: "#8c8c8c" }}
