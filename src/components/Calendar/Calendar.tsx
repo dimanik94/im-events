@@ -120,6 +120,7 @@ const Calendar: FC<{ isAuthorized: boolean }> = (props) => {
 
       return (
         <DateFullCell
+          key={calendarEventKey}
           date={date}
           isDisabled={isDateDisabled(date)}
           calendarEvent={calendarEvents?.[calendarEventKey]}
@@ -233,6 +234,9 @@ const Calendar: FC<{ isAuthorized: boolean }> = (props) => {
           },
           td: {
             position: "relative",
+          },
+          "td:hover .ant-picker-calendar-date": {
+            background: "#f5f5f5 !important",
           },
         }}
       />
